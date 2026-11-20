@@ -182,36 +182,6 @@ ${(isHome) ? html`
 
     <section style="display: flex; flex-direction: column; gap: 12px">
       <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
-        <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">${(t.dayByDay)}</h2>
-        <span style="display: flex; align-items: center; gap: 6px">
-          <span style="font-size: 11px; color: #D4C2E0; margin-right: 2px">${(t.swipe)}</span>
-        </span>
-      </div>
-      <div ref=${(dayRef)} onScroll=${(dayScroll)} onMouseDown=${(dayDown)} onMouseMove=${(dayMove)} onMouseUp=${(dayUp)} onMouseLeave=${(dayUp)} style="display: flex; gap: 10px; overflow-x: auto; scroll-snap-type: x mandatory; padding-bottom: 4px; scrollbar-width: none; cursor: grab; user-select: none">
-        ${((homeDays) || []).map((hd, $index) => html`
-          <button type="button" onClick=${(hd.open)} aria-label=${(hd.label)} style="font: inherit; text-align: left; flex: 0 0 280px; scroll-snap-align: start; padding: 16px; border-radius: 18px; border: 0; background: #F3E8F8; color: #25002B; cursor: pointer; display: flex; flex-direction: column; gap: 12px">
-            <span style="display: flex; gap: 12px; align-items: center">
-              <span style="width: 56px; height: 56px; flex-shrink: 0; border-radius: 14px; background: #3D005C; color: #FFFFFF; display: flex; flex-direction: column; align-items: center; justify-content: center"><span style="font-size: 20px; font-weight: 700; line-height: 1">${(hd.d)}</span><span style="font-size: 11px">${(t.may)}</span></span>
-              <span style="display: flex; flex-direction: column; gap: 2px"><span style="font-size: 16px; font-weight: 700">${(hd.full)}</span><span style="font-size: 12px; color: #5A3A6B">${(hd.tag)}</span></span>
-            </span>
-            <span style="display: flex; flex-direction: column; gap: 6px">
-              ${((hd.evs) || []).map((ev, $index) => html`
-                <span style="display: flex; gap: 10px; font-size: 13px"><span style="width: 92px; flex-shrink: 0; font-weight: 700">${(ev.t)}</span><span>${(ev.name)}</span></span>
-              `)}
-            </span>
-            <span style="font-size: 12px; font-weight: 700; color: #3D005C">${(t.seeDay)}</span>
-          </button>
-        `)}
-      </div>
-      <div style="display: flex; justify-content: center; align-items: center; gap: 2px">
-        ${((dayDots) || []).map((dt, $index) => html`
-          <button type="button" onClick=${(dt.go)} aria-label=${(dt.label)} style="font: inherit; width: 28px; height: 24px; border: 0; padding: 0; background: transparent; cursor: pointer; display: flex; align-items: center; justify-content: center"><span style=${(dt.s)}></span></button>
-        `)}
-      </div>
-    </section>
-
-    <section style="display: flex; flex-direction: column; gap: 12px">
-      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 12px">
         <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">${(t.maestros)}</h2>
         <span style="font-size: 11px; color: #D4C2E0">${(t.swipe)} →</span>
       </div>
@@ -243,13 +213,13 @@ ${(isHome) ? html`
       <span style="font-size: 12px; color: #D4C2E0">${(t.moreTba)}</span>
     </section>
 
-    <section style="background: #23002F; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
-      <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">${(t.venues)}</h2>
+    <button type="button" onClick=${(goVenues)} aria-label="Open the venues page" style="font: inherit; text-align: left; background: #23002F; border: 1px solid #4A1A63; border-radius: 18px; padding: 16px; color: #FFFFFF; cursor: pointer; display: flex; flex-direction: column; gap: 8px">
+      <span style="display: flex; justify-content: space-between; align-items: center; gap: 10px"><span style="font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">${(t.venues)}</span><span style="font-size: 12px; font-weight: 700; color: #F843AA">Map & directions ›</span></span>
       <span style="font-size: 14px; font-weight: 600">${(t.v1)}</span>
       <span style="font-size: 13px; color: #D4C2E0">${(t.v1d)}</span>
       <span style="font-size: 14px; font-weight: 600; margin-top: 6px">${(t.v2)}</span>
       <span style="font-size: 13px; color: #D4C2E0">${(t.v2d)}</span>
-    </section>
+    </button>
   </div>
 ` : null}
 
@@ -319,10 +289,30 @@ ${(isRegister) ? html`
       </div>
     </section>
 
+    <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+      <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">ACCOUNT TYPE</legend>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; background: #23002F; border-radius: 24px; padding: 4px">
+        ${((accTypes) || []).map((at, $index) => html`
+          <button type="button" onClick=${(at.pick)} aria-pressed=${(at.on)} style=${(at.style)}>${(at.n)}</button>
+        `)}
+      </div>
+      <span style="font-size: 12px; color: #A88BBB; line-height: 1.45">You can switch between single and couple later from your profile. Prices and features follow your choice.</span>
+      ${(regIsCouple) ? html`
+        <span style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #FFD27A; line-height: 1.45; background: #23002F; border-radius: 12px; padding: 10px 12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M12 8v5M12 16h.01M12 3l10 18H2z"></path></svg>As a couple you buy tickets at the couple price for two. You dance together, so the class partner finder is view-only: you can see who is looking, but you can't send or accept partner requests. Shared housing works as usual.</span>
+      ` : null}
+    </fieldset>
+
     <label style="display: flex; flex-direction: column; gap: 8px">
-      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">NAME</span>
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">${(regNameLabel)}</span>
       <input type="text" value=${(reg.name)} onInput=${(onName)} placeholder="First and last name" autocomplete="name" style="font: inherit; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; box-sizing: border-box; width: 100%" />
     </label>
+
+    ${(regIsCouple) ? html`
+      <label style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">YOUR PARTNER'S NAME</span>
+        <input type="text" value=${(reg.partnerName)} onInput=${(onPartnerName)} placeholder="First and last name" style="font: inherit; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; box-sizing: border-box; width: 100%" />
+      </label>
+    ` : null}
 
     <label style="display: flex; flex-direction: column; gap: 8px">
       <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">EMAIL</span>
@@ -335,6 +325,19 @@ ${(isRegister) ? html`
     </label>
 
     <span style="display: flex; gap: 8px; align-items: center; margin-top: -12px; font-size: 12px; color: #A88BBB"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 11h12v10H6zM8 11V8a4 4 0 0 1 8 0v3"></path></svg>Email and phone are only seen by the organizers.</span>
+
+    ${(askPassword) ? html`
+      <label style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">PASSWORD</span>
+        <input type="password" value=${(reg.password)} onInput=${(onPassword)} placeholder="At least 8 characters" autocomplete="new-password" minlength="8" style="font: inherit; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; box-sizing: border-box; width: 100%" />
+        <span style="font-size: 12px; color: #A88BBB; line-height: 1.45">Your phone can suggest a strong password and save it in iCloud Keychain or Google Password Manager.</span>
+      </label>
+    ` : null}
+    <button type="button" onClick=${(togglePasskey)} aria-pressed=${(reg.passkey)} style=${(passkeyStyle)}>
+      <svg width="26" height="26" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4H5a1 1 0 0 0-1 1v2M17 4h2a1 1 0 0 1 1 1v2M7 20H5a1 1 0 0 1-1-1v-2M17 20h2a1 1 0 0 0 1-1v-2M9 9v1M15 9v1M12 9v4h-1M9 16c1.5 1.2 4.5 1.2 6 0"></path></svg>
+      <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0; text-align: left"><span style="font-size: 14px; font-weight: 700">Sign in with Face ID or fingerprint</span><span style="font-size: 12px; opacity: 0.85">Creates a passkey on this phone, so next time you don't type a password</span></span>
+      <span style=${(passkeyBox)}>${(passkeyMark)}</span>
+    </button>
 
     <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
       <label style="display: flex; flex-direction: column; gap: 8px; min-width: 0">
@@ -382,6 +385,7 @@ ${(isRegister) ? html`
       <span style="font-size: 12px; color: #D4C2E0; line-height: 1.45">Age and gender are used only for anonymous festival statistics. They are never shown on your profile or to other dancers.</span>
     </div>
 
+    ${(regNotCouple) ? html`
     <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
       <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">I DANCE AS · CHOOSE ONE OR BOTH</legend>
       <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
@@ -390,6 +394,13 @@ ${(isRegister) ? html`
         `)}
       </div>
     </fieldset>
+    ` : null}
+    ${(regIsCouple) ? html`
+      <div style="display: flex; gap: 10px; align-items: center; background: #23002F; border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.45">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F843AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3 3-5 6-5s6 2 6 5M17 11a3 3 0 1 0 0-6M21 20c0-2.5-1.5-4-4-4.5"></path></svg>
+        <span><strong>Roles: one leader + one follower.</strong> A couple account always attends together as a leader and a follower.</span>
+      </div>
+    ` : null}
 
     <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px">
       <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">DANCING LEVEL</legend>
@@ -404,6 +415,119 @@ ${(isRegister) ? html`
     ` : null}
     <button type="submit" style=${(regBtnStyle)}>${(regBtnLabel)}</button>
   </form>
+` : null}
+
+
+${(isPostForm) ? html`
+  <form onSubmit=${(postSubmit)} style="display: flex; flex-direction: column; gap: 20px; padding: 16px 16px 28px">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <span style="font-size: 24px; font-weight: 700">${(postHeading)}</span>
+      <span style="font-size: 13px; color: #D4C2E0; line-height: 1.45">Got a spare bed or sofa during the festival? Share it with another dancer. Only registered festival dancers can see your post.</span>
+    </div>
+
+    ${(postIsOffer) ? html`
+      <div style="display: flex; flex-direction: column; gap: 20px">
+        <label style="display: flex; flex-direction: column; gap: 8px">
+          <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">ADDRESS OF THE PLACE</span>
+          <input type="text" value=${(post.address)} onInput=${(onPostAddress)} placeholder="Street, number, floor" autocomplete="street-address" style="font: inherit; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; box-sizing: border-box; width: 100%" />
+          <span style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #A88BBB; line-height: 1.45"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M6 11h12v10H6zM8 11V8a4 4 0 0 1 8 0v3"></path></svg>Private. Only the dancer you agree with will see it.</span>
+        </label>
+
+        ${(postHasLoc) ? html`
+          <div style="display: flex; gap: 12px; align-items: center; background: #F3E8F8; color: #25002B; border-radius: 14px; padding: 12px 14px">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#3D005C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12zM12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"></path></svg>
+            <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+              <span style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #5A3A6B">WHAT OTHER DANCERS WILL SEE</span>
+              <span style="font-size: 15px; font-weight: 700">${(postLoc.area)} · ${(postLoc.walk)}</span>
+              <span style="font-size: 11px; color: #5A3A6B">Walking distance to Venue 1 calculated with Google Maps</span>
+            </span>
+          </div>
+        ` : null}
+
+        <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+          <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">TYPE OF PLACE</legend>
+          <div style="display: flex; flex-direction: column; gap: 8px">
+            ${((postTypes) || []).map((pt, $index) => html`
+              <button type="button" onClick=${(pt.pick)} aria-pressed=${(pt.on)} style=${(pt.rowStyle)}><span style=${(pt.dot)}></span>${(pt.n)}</button>
+            `)}
+          </div>
+        </fieldset>
+      </div>
+    ` : null}
+
+    <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+      <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">DATES</legend>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <label style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+          <span style="font-size: 12px; color: #A88BBB">Check-in</span>
+          <input type="date" value=${(post.from)} min="2027-05-15" max="2027-06-05" onChange=${(onPostFrom)} style="font: inherit; min-height: 48px; padding: 0 10px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; box-sizing: border-box; width: 100%; color-scheme: dark" />
+        </label>
+        <label style="display: flex; flex-direction: column; gap: 6px; min-width: 0">
+          <span style="font-size: 12px; color: #A88BBB">Check-out</span>
+          <input type="date" value=${(post.to)} min="2027-05-16" max="2027-06-06" onChange=${(onPostTo)} style="font: inherit; min-height: 48px; padding: 0 10px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; box-sizing: border-box; width: 100%; color-scheme: dark" />
+        </label>
+      </div>
+      <span style="font-size: 12px; color: #D4C2E0">${(postNights)}</span>
+    </fieldset>
+
+    <label style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">${(postPriceLabel)}</span>
+      <span style="display: flex; align-items: center; gap: 10px; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; box-sizing: border-box">
+        <span style="font-size: 16px; font-weight: 700; color: #F843AA">€</span>
+        <input type="number" min="0" max="500" inputmode="numeric" value=${(post.price)} onInput=${(onPostPrice)} placeholder=${(postPricePh)} style="font: inherit; flex: 1; min-width: 0; min-height: 46px; border: 0; background: transparent; color: #FFFFFF; font-size: 15px; outline-offset: 2px" />
+        <span style="font-size: 13px; color: #A88BBB">${(postPriceUnit)}</span>
+      </span>
+    </label>
+
+    ${(postIsOffer) ? html`
+      <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+        <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">OPEN TO <span style="font-weight: 500; letter-spacing: 0; color: #A88BBB">· optional</span></legend>
+        <div style="display: flex; gap: 8px; flex-wrap: wrap">
+          ${((postOpen) || []).map((op, $index) => html`
+            <button type="button" onClick=${(op.pick)} aria-pressed=${(op.on)} style=${(op.style)}>${(op.n)}</button>
+          `)}
+        </div>
+      </fieldset>
+    ` : null}
+
+    <label style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">BOOKING LINK <span style="font-weight: 500; letter-spacing: 0; color: #A88BBB">· optional · private</span></span>
+      <input type="url" value=${(post.link)} onInput=${(onPostLink)} placeholder="https://www.airbnb.com/rooms/…" inputmode="url" style="font: inherit; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; box-sizing: border-box; width: 100%" />
+      <span style="font-size: 12px; color: #A88BBB; line-height: 1.45">The link to your Airbnb, Booking.com or hostel reservation. Never shown in the public post: it is sent automatically in the private chat when you accept a dancer.</span>
+    </label>
+
+    <label style="display: flex; flex-direction: column; gap: 8px">
+      <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">${(postDescLabel)} <span style="font-weight: 500; letter-spacing: 0; color: #A88BBB">· optional</span></span>
+      <textarea value=${(post.desc)} onInput=${(onPostDesc)} placeholder=${(postDescPh)} rows="4" maxlength="500" style="font: inherit; padding: 12px 14px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; line-height: 1.5; box-sizing: border-box; width: 100%; resize: vertical"></textarea>
+    </label>
+
+    <div style="display: flex; gap: 10px; align-items: flex-start; background: #23002F; border-radius: 12px; padding: 10px 12px">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A88BBB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M6 11h12v10H6zM8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+      <span style="font-size: 12px; color: #D4C2E0; line-height: 1.45">${(postPrivacyNote)}</span>
+    </div>
+
+    ${(postMissing) ? html`
+      <span style="font-size: 12px; color: #FFB36B; text-align: center">${(postHint)}</span>
+    ` : null}
+    <button type="submit" style=${(postBtnStyle)}>${(postBtnLabel)}</button>
+  </form>
+` : null}
+
+${(isPostDone) ? html`
+  <div style="display: flex; flex-direction: column; gap: 18px; padding: 24px 16px 28px; align-items: center; text-align: center">
+    <span style="width: 64px; height: 64px; border-radius: 32px; background: #7FE0D0; color: #1A0024; display: flex; align-items: center; justify-content: center"><svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12l5 5 9-10"></path></svg></span>
+    <span style="font-size: 24px; font-weight: 700">Your post is live</span>
+    <span style="font-size: 14px; color: #D4C2E0; line-height: 1.5; max-width: 300px">Dancers now see the neighbourhood and walking distance, never the address. When you accept a dancer, the post becomes private between you two and leaves the public list.</span>
+    <article style="width: 100%; box-sizing: border-box; text-align: left; background: #23002F; border: 1px solid #7FE0D0; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 6px">
+      <span style="align-self: flex-start; font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 3px 8px; border-radius: 8px; background: #7FE0D0; color: #1A0024">YOUR POST</span>
+      <span style="font-size: 16px; font-weight: 700">${(lastPost.t)}</span>
+      <span style="font-size: 13px">${(lastPost.a)} · ${(lastPost.w)}</span>
+      <span style="font-size: 12px; color: #D4C2E0">${(lastPost.b)} · ${(lastPost.dt)}</span>
+      <span style="font-size: 13px; font-weight: 700; color: #F843AA">${(lastPost.p)}</span>
+    </article>
+    <button type="button" onClick=${(seeHousing)} style=${"font: inherit; width: 100%; min-height: 50px; border-radius: 25px; border: 0; background: " + String((accent)) + "; color: #1A0024; font-weight: 800; letter-spacing: 0.5px; cursor: pointer"}>SEE SHARED HOUSING</button>
+    <button type="button" onClick=${(postAnother)} style="font: inherit; width: 100%; min-height: 48px; border-radius: 24px; border: 1px solid #FFFFFF; background: transparent; color: #FFFFFF; font-weight: 600; cursor: pointer">Post another</button>
+  </div>
 ` : null}
 
 
@@ -430,6 +554,8 @@ ${(isMe) ? html`
       `)}
     </div>
 
+    <button type="button" onClick=${(goRegister)} style="font: inherit; min-height: 52px; padding: 0 16px; border-radius: 16px; border: 1px solid #4A1A63; background: #23002F; color: #FFFFFF; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600"><span style="display: flex; align-items: center; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F843AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3 3-5 6-5s6 2 6 5M17 11a3 3 0 1 0 0-6M21 20c0-2.5-1.5-4-4-4.5"></path></svg>Account</span><span style="color: #F843AA; font-weight: 700">${(accountLabel)} ›</span></button>
+
     <button type="button" onClick=${(openLang)} style="font: inherit; min-height: 52px; padding: 0 16px; border-radius: 16px; border: 1px solid #4A1A63; background: #23002F; color: #FFFFFF; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 14px; font-weight: 600"><span style="display: flex; align-items: center; gap: 10px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F843AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18zM3 12h18M12 3c2.5 2.5 3.8 5.5 3.8 9s-1.3 6.5-3.8 9M12 3c-2.5 2.5-3.8 5.5-3.8 9s1.3 6.5 3.8 9"></path></svg>${(t.language)}</span><span style="color: #F843AA; font-weight: 700">${(langName)} ›</span></button>
 
     <section style="display: flex; flex-direction: column; gap: 10px">
@@ -449,7 +575,10 @@ ${(isMe) ? html`
     </section>
 
     <section style="display: flex; flex-direction: column; gap: 10px">
-      <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">MESSAGES</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 12px">
+        <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">MESSAGES</h2>
+        <button type="button" onClick=${(goInbox)} style="font: inherit; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #5A2A75; background: transparent; color: #FFFFFF; font-size: 12px; font-weight: 600; cursor: pointer">See all ›</button>
+      </div>
       <div style="background: #23002F; border-radius: 18px; padding: 4px 6px">
         ${((convos) || []).map((cv, $index) => html`
           <button type="button" onClick=${(cv.open)} style="font: inherit; width: 100%; text-align: left; min-height: 64px; padding: 10px; border: 0; border-bottom: 1px solid #3A0F50; background: transparent; color: #FFFFFF; cursor: pointer; display: flex; gap: 12px; align-items: center">
@@ -484,23 +613,133 @@ ${(isMe) ? html`
 
 ${(isChat) ? html`
   <div style="display: flex; flex-direction: column; gap: 10px; padding: 16px 16px 20px; min-height: 100%; box-sizing: border-box">
-    <div style="display: flex; flex-direction: column; gap: 2px; padding-bottom: 8px; border-bottom: 1px solid #3A0F50">
-      <span style="font-size: 17px; font-weight: 700">${(chat.n)}</span>
-      <span style="font-size: 12px; color: #D4C2E0">${(chat.tag)}</span>
+    <div style="display: flex; gap: 12px; align-items: center; padding-bottom: 10px; border-bottom: 1px solid #3A0F50">
+      <span style=${(chat.avatarStyle)}>${(chat.i)}</span>
+      <span style="display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0">
+        <span style="display: flex; align-items: center; gap: 6px"><span style="font-size: 17px; font-weight: 700">${(chat.n)}</span>${(chat.isOrg) ? html`<span style="font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 2px 6px; border-radius: 6px; background: #F843AA; color: #1A0024">OFFICIAL</span>` : null}</span>
+        <span style=${(chat.tagStyle)}>${(chat.tag)}</span>
+      </span>
+      <button type="button" onClick=${(toggleChatMenu)} aria-label="Conversation options" style="font: inherit; width: 40px; height: 40px; border-radius: 20px; border: 1px solid #4A1A63; background: transparent; color: #FFFFFF; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><circle cx="5" cy="12" r="2"></circle><circle cx="12" cy="12" r="2"></circle><circle cx="19" cy="12" r="2"></circle></svg></button>
     </div>
+    ${(chatMenu) ? html`
+      <div style="display: flex; flex-direction: column; background: #23002F; border: 1px solid #5A2A75; border-radius: 14px; padding: 4px">
+        <button type="button" onClick=${(chatMute)} style="font: inherit; text-align: left; min-height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #FFFFFF; font-size: 14px; cursor: pointer">${(chatMuteLabel)}</button>
+        <button type="button" onClick=${(chatReport)} style="font: inherit; text-align: left; min-height: 44px; padding: 0 12px; border: 0; border-radius: 10px; background: transparent; color: #FFB36B; font-size: 14px; cursor: pointer">Report or block ${(chat.n)}</button>
+      </div>
+    ` : null}
+    ${(chatReported) ? html`
+      <span style="font-size: 12px; color: #FFB36B; text-align: center">Thank you. The organizers will review this conversation.</span>
+    ` : null}
+
+    ${(chat.hasCtx) ? html`
+      <div style="background: #3D005C; border-radius: 16px; padding: 12px 14px; display: flex; flex-direction: column; gap: 8px">
+        <span style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #F3E8F8">${(chat.ctxKind)}</span><span style=${(chat.ctxStatusStyle)}>${(chat.ctxStatus)}</span></span>
+        <span style="font-size: 15px; font-weight: 700">${(chat.ctxTitle)}</span>
+        <span style="font-size: 12px; color: #E6D6EF">${(chat.ctxSub)}</span>
+        ${(chat.showPartnerActions) ? html`
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 2px">
+            <button type="button" onClick=${(chatDecline)} style="font: inherit; min-height: 40px; border-radius: 20px; border: 1px solid #FFFFFF; background: transparent; color: #FFFFFF; font-size: 13px; font-weight: 600; cursor: pointer">Decline</button>
+            <button type="button" onClick=${(chatAccept)} style="font: inherit; min-height: 40px; border-radius: 20px; border: 0; background: #7FE0D0; color: #1A0024; font-size: 13px; font-weight: 800; cursor: pointer">Accept as partner</button>
+          </div>
+        ` : null}
+        ${(chat.showHostActions) ? html`
+          <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 2px">
+            <button type="button" onClick=${(hostDecline)} style="font: inherit; min-height: 40px; border-radius: 20px; border: 1px solid #FFFFFF; background: transparent; color: #FFFFFF; font-size: 13px; font-weight: 600; cursor: pointer">Decline</button>
+            <button type="button" onClick=${(hostAccept)} style="font: inherit; min-height: 40px; border-radius: 20px; border: 0; background: #7FE0D0; color: #1A0024; font-size: 13px; font-weight: 800; cursor: pointer">Accept & share address</button>
+          </div>
+        ` : null}
+        ${(chat.showSendRequest) ? html`
+          <button type="button" onClick=${(sendPartnerReq)} style="font: inherit; min-height: 40px; border-radius: 20px; border: 0; background: #F843AA; color: #1A0024; font-size: 13px; font-weight: 800; cursor: pointer">Send partner request</button>
+        ` : null}
+        ${(chat.showPendingNote) ? html`
+          <span style="font-size: 12px; color: #FFD27A; line-height: 1.45">${(chat.pendingNote)}</span>
+        ` : null}
+        <button type="button" onClick=${(chat.ctxGo)} style="font: inherit; align-self: flex-start; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #A88BBB; background: transparent; color: #FFFFFF; font-size: 12px; font-weight: 600; cursor: pointer">${(chat.ctxGoLabel)}</button>
+      </div>
+    ` : null}
+    ${(chat.isPrivate) ? html`
+      <div style="display: flex; gap: 8px; align-items: flex-start; background: #23002F; border-radius: 12px; padding: 10px 12px; font-size: 12px; color: #D4C2E0; line-height: 1.45">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#A88BBB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><path d="M6 11h12v10H6zM8 11V8a4 4 0 0 1 8 0v3"></path></svg>
+        <span>Private conversation. The address and any booking links you share here are only visible to the two of you.</span>
+      </div>
+    ` : null}
     ${((chat.msgs) || []).map((m, $index) => html`
-      <div style=${(m.s)}>${(m.t)}</div>
+      ${(m.isSep) ? html`
+        <span style="align-self: center; font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #A88BBB; padding: 4px 10px; border-radius: 10px; background: #23002F">${(m.t)}</span>
+      ` : null}
+      ${(m.isSystem) ? html`
+        <span style="align-self: center; max-width: 88%; text-align: center; font-size: 12px; line-height: 1.45; color: #7FE0D0; padding: 6px 12px; border-radius: 12px; border: 1px solid #2F6F66">${(m.t)}</span>
+      ` : null}
+      ${(m.isText) ? html`
+        <div style=${(m.s)}><span>${(m.t)}</span><span style=${(m.timeStyle)}>${(m.timeLabel)}</span></div>
+      ` : null}
+      ${(m.isLink) ? html`
+        <a href=${(m.url)} target="_blank" rel="noopener noreferrer" style=${(m.linkStyle)}>
+          <span style="width: 40px; height: 40px; flex-shrink: 0; border-radius: 10px; background: #3D005C; display: flex; align-items: center; justify-content: center"><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#F843AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></span>
+          <span style="display: flex; flex-direction: column; gap: 2px; min-width: 0">
+            <span style="font-size: 11px; font-weight: 800; letter-spacing: 1px; color: #A88BBB">BOOKING LINK</span>
+            <span style="font-size: 14px; font-weight: 700; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">${(m.host)}</span>
+            <span style="font-size: 11px; color: #D4C2E0">${(m.who)} · tap to open</span>
+          </span>
+        </a>
+      ` : null}
     `)}
     <div style="flex: 1"></div>
+    ${(chat.hasQuick) ? html`
+      <div style="display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none">
+        ${((chat.quick) || []).map((q, $index) => html`
+          <button type="button" onClick=${(q.send)} style="font: inherit; flex-shrink: 0; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #F843AA; background: transparent; color: #FFFFFF; font-size: 13px; font-weight: 600; cursor: pointer">${(q.n)}</button>
+        `)}
+      </div>
+    ` : null}
+    ${(linkMode) ? html`
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; font-size: 12px; color: #F843AA; font-weight: 700">
+        <span>Share a booking link (Airbnb, Booking.com, hostel…)</span>
+        <button type="button" onClick=${(toggleLinkMode)} style="font: inherit; min-height: 32px; padding: 0 10px; border-radius: 16px; border: 1px solid #5A2A75; background: transparent; color: #FFFFFF; font-size: 12px; cursor: pointer">Cancel</button>
+      </div>
+    ` : null}
+    ${(linkError) ? html`
+      <span style="font-size: 12px; color: #FFB36B">Paste a full link starting with https://</span>
+    ` : null}
     <div style="display: flex; gap: 8px; align-items: center">
+      ${(chat.canLink) ? html`
+        <button type="button" onClick=${(toggleLinkMode)} aria-label="Share a booking link" aria-pressed=${(linkMode)} style=${(linkBtnStyle)}><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 14a4 4 0 0 0 5.7 0l3-3a4 4 0 0 0-5.7-5.7l-1 1M14 10a4 4 0 0 0-5.7 0l-3 3a4 4 0 0 0 5.7 5.7l1-1"></path></svg></button>
+      ` : null}
       <label style="flex: 1; display: flex">
         <span style="position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0)">Message</span>
-        <input type="text" value=${(draft)} onInput=${(onDraft)} placeholder="Write a message…" style="font: inherit; flex: 1; min-height: 46px; padding: 0 16px; border-radius: 23px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 14px; box-sizing: border-box; width: 100%" />
+        <input type="text" value=${(draft)} onInput=${(onDraft)} placeholder=${(draftPh)} style="font: inherit; flex: 1; min-height: 46px; padding: 0 16px; border-radius: 23px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 14px; box-sizing: border-box; width: 100%" />
       </label>
       <button type="button" onClick=${(sendMsg)} aria-label="Send message" style=${"font: inherit; width: 46px; height: 46px; border-radius: 23px; border: 0; background: " + String((accent)) + "; color: #1A0024; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0"}>
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12l16-8-6 16-3-7z"></path></svg>
       </button>
     </div>
+  </div>
+` : null}
+
+
+${(isInbox) ? html`
+  <div style="display: flex; flex-direction: column; gap: 14px; padding: 16px 16px 28px">
+    <div style="display: flex; gap: 8px; overflow-x: auto; scrollbar-width: none">
+      ${((inboxFilters) || []).map((f, $index) => html`
+        <button type="button" onClick=${(f.pick)} aria-pressed=${(f.on)} style=${(f.style)}>${(f.n)}<span style=${(f.countStyle)}>${(f.count)}</span></button>
+      `)}
+    </div>
+    <div style="display: flex; flex-direction: column; background: #23002F; border-radius: 18px; padding: 4px 6px">
+      ${((inboxList) || []).map((cv, $index) => html`
+        <button type="button" onClick=${(cv.open)} style="font: inherit; width: 100%; text-align: left; min-height: 72px; padding: 12px 10px; border: 0; border-bottom: 1px solid #3A0F50; background: transparent; color: #FFFFFF; cursor: pointer; display: flex; gap: 12px; align-items: center">
+          <span style=${(cv.avatarStyle)}>${(cv.i)}</span>
+          <span style="display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0">
+            <span style="display: flex; justify-content: space-between; align-items: baseline; gap: 8px"><span style=${(cv.nameStyle)}>${(cv.n)}</span><span style="font-size: 11px; color: #A88BBB; flex-shrink: 0">${(cv.when)}</span></span>
+            <span style="display: flex; align-items: center; gap: 6px; min-width: 0"><span style=${(cv.tagStyle)}>${(cv.tagShort)}</span><span style=${(cv.lastStyle)}>${(cv.last)}</span></span>
+          </span>
+          ${(cv.unread) ? html`<span aria-label="Unread" style="width: 10px; height: 10px; border-radius: 5px; background: #F843AA; flex-shrink: 0"></span>` : null}
+        </button>
+      `)}
+      ${(inboxEmpty) ? html`
+        <span style="padding: 24px 10px; text-align: center; font-size: 13px; color: #D4C2E0">No conversations here yet.</span>
+      ` : null}
+    </div>
+    <p style="margin: 0; font-size: 12px; color: #A88BBB; line-height: 1.5; text-align: center">Only registered festival dancers can message each other. You can report or block any conversation from inside it.</p>
   </div>
 ` : null}
 
@@ -691,19 +930,29 @@ ${(isClassDetail) ? html`
     ` : null}
 
     <section style="display: flex; flex-direction: column; gap: 12px">
+      ${(notCouple) ? html`
       <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">I DANCE AS</h2>
       <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
         ${((roles) || []).map((r, $index) => html`
           <button type="button" onClick=${(r.pick)} aria-pressed=${(r.on)} style=${(r.style)}>${(r.n)}</button>
         `)}
       </div>
-      <label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; background: #23002F; border-radius: 14px; padding: 0 16px; font-size: 14px; cursor: pointer">
-        <span>Show me as looking for a partner</span>
-        <input type="checkbox" checked=${(looking)} onChange=${(toggleLooking)} style="width: 22px; height: 22px; accent-color: #F843AA" />
-      </label>
+      ` : null}
+      ${(notCouple) ? html`
+        <label style="display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 48px; background: #23002F; border-radius: 14px; padding: 0 16px; font-size: 14px; cursor: pointer">
+          <span>Show me as looking for a partner</span>
+          <input type="checkbox" checked=${(looking)} onChange=${(toggleLooking)} style="width: 22px; height: 22px; accent-color: #F843AA" />
+        </label>
+      ` : null}
+      ${(isCouple) ? html`
+        <div style="display: flex; gap: 10px; align-items: flex-start; background: #23002F; border: 1px solid #FFD27A; border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.45">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#FFD27A" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3 3-5 6-5s6 2 6 5M17 11a3 3 0 1 0 0-6M21 20c0-2.5-1.5-4-4-4.5"></path></svg>
+          <span>${(coupleNote)}</span>
+        </div>
+      ` : null}
     </section>
 
-    ${(hasIncoming) ? html`
+    ${(showIncoming) ? html`
       <section style="display: flex; flex-direction: column; gap: 10px">
         <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">REQUEST FOR YOU</h2>
         <div style="background: #23002F; border: 1px solid #F843AA; border-radius: 18px; padding: 14px; display: flex; flex-direction: column; gap: 12px">
@@ -720,11 +969,16 @@ ${(isClassDetail) ? html`
     ` : null}
 
     <section style="display: flex; flex-direction: column; gap: 10px">
-      <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">LOOKING FOR A PARTNER · ${(peopleCount)}</h2>
+      <div style="display: flex; justify-content: space-between; align-items: center; gap: 10px">
+        <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">LOOKING FOR A PARTNER · ${(peopleCount)}</h2>
+        <button type="button" onClick=${(goPartnerMsgs)} style="font: inherit; flex-shrink: 0; min-height: 36px; padding: 0 12px; border-radius: 18px; border: 1px solid #F843AA; background: transparent; color: #FFFFFF; font-size: 12px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 6px">Messages<span style=${(partnerMsgBadge)}>${(partnerUnread)}</span> ›</button>
+      </div>
+      <span style="font-size: 12px; color: #A88BBB; margin-top: -4px">Tap a dancer to chat before sending a partner request.</span>
       ${((people) || []).map((p, $index) => html`
         <div style="background: #23002F; border-radius: 16px; padding: 12px 14px; display: flex; gap: 12px; align-items: center">
           <span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 22px; background: #3D005C; font-weight: 700; display: flex; align-items: center; justify-content: center">${(p.i)}</span>
-          <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0"><span style="font-size: 15px; font-weight: 700">${(p.n)} · ${(p.c)}</span><span style="font-size: 12px; color: #D4C2E0">${(p.roleLabel)} · ${(p.lv)}</span></span>
+          <button type="button" onClick=${(p.chat)} style="font: inherit; text-align: left; background: transparent; border: 0; padding: 0; color: #FFFFFF; cursor: pointer; display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0"><span style="font-size: 15px; font-weight: 700">${(p.n)} · ${(p.c)}</span><span style="font-size: 12px; color: #D4C2E0">${(p.roleLabel)} · ${(p.lv)}</span></button>
+          <button type="button" onClick=${(p.chat)} aria-label=${(p.chatLabel)} style="font: inherit; width: 40px; height: 40px; flex-shrink: 0; border-radius: 20px; border: 1px solid #5A2A75; background: transparent; color: #FFFFFF; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg></button>
           <button type="button" onClick=${(p.request)} style=${(p.btnStyle)}>${(p.btn)}</button>
         </div>
       `)}
@@ -735,6 +989,20 @@ ${(isClassDetail) ? html`
 
 ${(isTicketsCart) ? html`
   <div style="display: flex; flex-direction: column; gap: 20px; padding: 16px 16px 120px">
+    ${(isCouple) ? html`
+      <div style="background: #23002F; border: 1px solid #FFD27A; border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.45"><strong style="color: #FFD27A">Couple account</strong> · every ticket below is for two people. [Couple prices to be set by the organizers: shown as 2 × single price for now.]</div>
+    ` : null}
+    <div style="display: flex; gap: 10px; align-items: flex-start; background: #23002F; border-radius: 14px; padding: 12px 14px; font-size: 12px; color: #D4C2E0; line-height: 1.5">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A88BBB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><path d="M12 8v5M12 16h.01M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"></path></svg>
+      <span style="font-size: 14px"><strong style="color: rgb(255, 255, 255)">This is will be your festival passport:</strong> <br />You can register as a single person or couple and the prices will reflect that choice.<br /><br />For the special show you don't need to register as a dancer and can bring up to 4 friends with you or share a table up with random people.</span>
+    </div>
+    ${(hasOwned) ? html`
+      <button type="button" onClick=${(viewOwned)} style="font: inherit; text-align: left; display: flex; gap: 12px; align-items: center; background: #F3E8F8; color: #25002B; border: 0; border-radius: 16px; padding: 12px 14px; cursor: pointer">
+        <span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px; background: #25002B; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2M18 14h2v2M14 18h2v2h-2zM20 20h0"></path></svg></span>
+        <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0"><span style="font-size: 15px; font-weight: 700">${(ownedSummary)}</span><span style="font-size: 12px; color: #5A3A6B">Tap to show your QR code at the entrance</span></span>
+        <span style="font-size: 18px; font-weight: 700" aria-hidden="true">›</span>
+      </button>
+    ` : null}
     ${((tGroups) || []).map((g, $index) => html`
       <section style="display: flex; flex-direction: column; gap: 10px">
         <div style="display: flex; flex-direction: column; gap: 2px">
@@ -747,13 +1015,32 @@ ${(isTicketsCart) ? html`
               <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0">
                 <span style="font-size: 14px; font-weight: 600">${(it.n)}</span>
                 <span style="font-size: 12px; color: #D4C2E0">${(it.sub)}</span>
+                ${(it.hasNights) ? html`
+                  <span style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #7FE0D0; margin-top: 6px">PICK YOUR NIGHT</span>
+                  <span style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px">
+                    ${((it.nightChips) || []).map((nc, $index) => html`
+                      <button type="button" onClick=${(nc.pick)} aria-pressed=${(nc.on)} style=${(nc.style)}>${(nc.n)}</button>
+                    `)}
+                  </span>
+                ` : null}
+                ${(it.isOwned) ? html`
+                  <button type="button" onClick=${(viewOwned)} style="font: inherit; align-self: flex-start; margin-top: 4px; min-height: 28px; padding: 0 10px; border-radius: 14px; border: 0; background: #7FE0D0; color: #1A0024; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; cursor: pointer">✓ ${(it.ownedLabel)} · QR ›</button>
+                ` : null}
+                ${(it.isIncluded) ? html`
+                  <button type="button" onClick=${(viewOwned)} style="font: inherit; align-self: flex-start; margin-top: 4px; min-height: 28px; padding: 0 10px; border-radius: 14px; border: 1px solid #7FE0D0; background: transparent; color: #7FE0D0; font-size: 11px; font-weight: 700; white-space: nowrap; cursor: pointer">✓ In your pass · QR ›</button>
+                ` : null}
               </span>
               <span style=${"font-size: 15px; font-weight: 700; color: " + String((accent)) + "; min-width: 44px; text-align: right"}>${(it.price)}</span>
+              ${(it.multi) ? html`
               <span style="display: flex; align-items: center; gap: 4px">
-                <button type="button" onClick=${(it.dec)} aria-label=${(it.decLabel)} style="font: inherit; width: 36px; height: 36px; border-radius: 18px; border: 1px solid #5A2A75; background: transparent; color: #FFFFFF; font-size: 18px; cursor: pointer; padding: 0">−</button>
+                <button type="button" onClick=${(it.dec)} aria-label=${(it.decLabel)} aria-disabled=${(it.atMin)} style=${(it.decStyle)}>−</button>
                 <span style="width: 22px; text-align: center; font-size: 15px; font-weight: 700">${(it.qty)}</span>
-                <button type="button" onClick=${(it.inc)} aria-label=${(it.incLabel)} style="font: inherit; width: 36px; height: 36px; border-radius: 18px; border: 0; background: #F843AA; color: #1A0024; font-size: 18px; font-weight: 700; cursor: pointer; padding: 0">+</button>
+                <button type="button" onClick=${(it.inc)} aria-label=${(it.incLabel)} aria-disabled=${(it.atMax)} style=${(it.incStyle)}>+</button>
               </span>
+              ` : null}
+              ${(it.single) ? html`
+                <button type="button" onClick=${(it.toggle)} aria-pressed=${(it.inCart)} aria-disabled=${(it.unavailable)} style=${(it.toggleStyle)}>${(it.toggleLabel)}</button>
+              ` : null}
             </div>
           `)}
         </div>
@@ -775,6 +1062,13 @@ ${(isTicketsPay) ? html`
       `)}
       <div style="display: flex; justify-content: space-between; min-height: 52px; align-items: center; font-size: 17px; font-weight: 700"><span>Total</span><span style=${"color: " + String((accent))}>${(totalLabel)}</span></div>
     </section>
+    ${(guestCheckout) ? html`
+      <label style="display: flex; flex-direction: column; gap: 8px">
+        <span style="font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">EMAIL FOR YOUR TICKETS</span>
+        <input type="email" value=${(guestEmail)} onInput=${(onGuestEmail)} placeholder="you@example.com" autocomplete="email" inputmode="email" style="font: inherit; min-height: 48px; padding: 0 14px; border-radius: 12px; border: 1px solid #5A2A75; background: #23002F; color: #FFFFFF; font-size: 15px; box-sizing: border-box; width: 100%" />
+        <span style="font-size: 12px; color: #A88BBB; line-height: 1.45">No account needed: your QR tickets arrive by email and stay in this app on this phone.</span>
+      </label>
+    ` : null}
     <section style="display: flex; flex-direction: column; gap: 10px">
       <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">PAY WITH</h2>
       ${((payMethods) || []).map((m, $index) => html`
@@ -786,22 +1080,29 @@ ${(isTicketsPay) ? html`
 ` : null}
 
 ${(isTicketsDone) ? html`
-  <div style="display: flex; flex-direction: column; gap: 18px; padding: 20px 16px 28px; align-items: center; text-align: center">
-    <span style="font-size: 26px; font-weight: 700">You're in!</span>
-    <span style="font-size: 14px; color: #D4C2E0">Show this code at the entrance of Venue 1 to get your wristband.</span>
-    <div style="background: #FFFFFF; border-radius: 20px; padding: 18px">
-      <div role="img" aria-label="Ticket QR code" style="display: grid; grid-template-columns: repeat(21, 9px); gap: 0">
-        ${((qr) || []).map((q, $index) => html`
-          <div style=${(q.s)}></div>
-        `)}
-      </div>
+  <div style="display: flex; flex-direction: column; gap: 14px; padding: 20px 16px 28px">
+    <div style="display: flex; flex-direction: column; gap: 4px">
+      <span style="font-size: 24px; font-weight: 700">${(walletTitle)}</span>
+      <span style="font-size: 13px; color: #D4C2E0; line-height: 1.45">Every ticket has its own code. Security scans it at the venue door, the table host at your table, and the teacher's assistant at the class room.</span>
     </div>
-    <div style="width: 100%; background: #23002F; border-radius: 18px; padding: 6px 16px; box-sizing: border-box; text-align: left">
-      ${((doneLines) || []).map((l, $index) => html`
-        <div style="display: flex; justify-content: space-between; gap: 12px; min-height: 44px; align-items: center; border-bottom: 1px solid #3A0F50; font-size: 14px"><span>${(l.qty)} × ${(l.n)}</span><span style="font-weight: 700">${(l.total)}</span></div>
-      `)}
-    </div>
-    <button type="button" onClick=${(goClasses)} style="font: inherit; width: 100%; min-height: 48px; border-radius: 24px; border: 1px solid #FFFFFF; background: transparent; color: #FFFFFF; font-weight: 600; cursor: pointer">Find a partner for your classes</button>
+    <span style="font-size: 12px; color: #A88BBB">Holder: <strong style="color: #FFFFFF">${(passHolder)}</strong></span>
+    ${((passes) || []).map((ps, $index) => html`
+      <button type="button" onClick=${(ps.open)} style=${"font: inherit; text-align: left; display: flex; gap: 12px; align-items: center; background: #23002F; border: 1px solid #4A1A63; border-left: 4px solid " + String((ps.color)) + "; border-radius: 16px; padding: 12px 14px; color: #FFFFFF; cursor: pointer"}>
+        <span style="display: flex; flex-direction: column; gap: 3px; flex: 1; min-width: 0">
+          <span style=${"font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: " + String((ps.color))}>${(ps.kind)}</span>
+          <span style="font-size: 15px; font-weight: 700">${(ps.title)}</span>
+          <span style="font-size: 12px; color: #D4C2E0">${(ps.short)}</span>
+        </span>
+        <span style="display: flex; flex-direction: column; align-items: center; gap: 4px; flex-shrink: 0">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"></path></svg>
+          <span style="font-size: 11px; font-weight: 700; color: #F843AA">QR ›</span>
+        </span>
+      </button>
+    `)}
+    ${(hasClassCredits) ? html`
+      <div style="background: #23002F; border: 1px dashed #7FE0D0; border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.45">${(classCreditText)}</div>
+    ` : null}
+    <button type="button" onClick=${(goClasses)} style="font: inherit; width: 100%; min-height: 48px; border-radius: 24px; border: 1px solid #FFFFFF; background: transparent; color: #FFFFFF; font-weight: 600; cursor: pointer">Go to classes</button>
   </div>
 ` : null}
 
@@ -847,14 +1148,23 @@ ${(isLisbon) ? html`
 
     ${(isHousing) ? html`
       <div style="display: flex; flex-direction: column; gap: 14px">
-        <div style="display: flex; gap: 8px">
-          ${((hFilters) || []).map((f, $index) => html`
-            <button type="button" onClick=${(f.pick)} aria-pressed=${(f.on)} style=${(f.style)}>${(f.n)}</button>
-          `)}
+        <div style="display: flex; gap: 14px; align-items: flex-start; background: #3D005C; border-radius: 18px; padding: 16px">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#F843AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M3 11l9-7 9 7v9a1 1 0 0 1-1 1H4a1 1 0 0 1-1-1zM9 21v-6h6v6"></path></svg>
+          <span style="display: flex; flex-direction: column; gap: 6px">
+            <span style="font-size: 16px; font-weight: 700">Share your place, share the festival</span>
+            <span style="font-size: 13px; color: #E6D6EF; line-height: 1.5">Booked a flat or a room for the festival? Offer the spare bed or sofa to another dancer: split the cost and save money, and come home from the milonga with company. Looking for a place? Pick one of the rooms below and message the host.</span>
+            <button type="button" onClick=${(goHousingMsgs)} style="font: inherit; align-self: flex-start; margin-top: 4px; min-height: 40px; padding: 0 14px; border-radius: 20px; border: 1px solid #F843AA; background: transparent; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer; display: flex; align-items: center; gap: 8px"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#F843AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>Private messages<span style=${(housingMsgBadge)}>${(housingUnread)}</span> ›</button>
+          </span>
         </div>
         <button type="button" onClick=${(toggleNewListing)} style="font: inherit; min-height: 48px; border-radius: 24px; border: 1px dashed #F843AA; background: transparent; color: #FFFFFF; font-weight: 600; cursor: pointer">${(newListingLabel)}</button>
         ${((listings) || []).map((l, $index) => html`
-          <article style="background: #23002F; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px">
+          <article style=${(l.card)}>
+            ${(l.hasPhoto) ? html`
+              <img src=${(l.photo)} alt="Photo of the place" style="width: 100%; height: 150px; object-fit: cover; border-radius: 12px; display: block" />
+            ` : null}
+            ${(l.mine) ? html`
+              <span style="align-self: flex-start; font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 3px 8px; border-radius: 8px; background: #7FE0D0; color: #1A0024">YOUR POST</span>
+            ` : null}
             <div style="display: flex; justify-content: space-between; gap: 10px; align-items: flex-start">
               <span style="font-size: 16px; font-weight: 700">${(l.t)}</span>
               <span style="font-size: 13px; font-weight: 700; color: #F843AA; text-align: right; flex-shrink: 0">${(l.p)}</span>
@@ -865,9 +1175,32 @@ ${(isLisbon) ? html`
               <span style="font-size: 12px; color: #D4C2E0">${(l.h)}</span>
               <button type="button" onClick=${(l.msg)} style=${(l.btnStyle)}>${(l.btn)}</button>
             </div>
+            ${(l.hasReq) ? html`
+              <div style="display: flex; align-items: center; gap: 10px; margin-top: 4px; padding-top: 10px; border-top: 1px solid #3A0F50">
+                <span style="width: 36px; height: 36px; flex-shrink: 0; border-radius: 18px; background: #3D005C; font-weight: 700; display: flex; align-items: center; justify-content: center">${(l.reqI)}</span>
+                <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0"><span style="font-size: 13px; font-weight: 700">${(l.reqN)}</span><span style="font-size: 11px; color: #D4C2E0">wants to stay · ${(l.dt)}</span></span>
+                <button type="button" onClick=${(l.chatReq)} aria-label="Chat with this dancer" style="font: inherit; width: 40px; height: 40px; flex-shrink: 0; border-radius: 20px; border: 1px solid #5A2A75; background: transparent; color: #FFFFFF; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg></button>
+                <button type="button" onClick=${(l.accept)} style="font: inherit; min-height: 40px; padding: 0 14px; border-radius: 20px; border: 0; background: #7FE0D0; color: #1A0024; font-size: 13px; font-weight: 800; cursor: pointer; flex-shrink: 0">Accept</button>
+              </div>
+            ` : null}
           </article>
         `)}
-        <p style="margin: 0; font-size: 12px; color: #D4C2E0; line-height: 1.5; text-align: center">Listings are posted by festival attendees. Only registered dancers can message each other.</p>
+        ${(hasAgreed) ? html`
+          <section style="display: flex; flex-direction: column; gap: 10px; margin-top: 6px">
+            <h2 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">AGREED · PRIVATE</h2>
+            ${((agreed) || []).map((ag, $index) => html`
+              <article style="background: #F3E8F8; color: #25002B; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 6px">
+                <span style="align-self: flex-start; font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 3px 8px; border-radius: 8px; background: #3D005C; color: #FFFFFF">ONLY YOU & ${(ag.with)}</span>
+                <span style="font-size: 16px; font-weight: 700">${(ag.t)}</span>
+                <span style="font-size: 13px">${(ag.b)} · ${(ag.dt)}</span>
+                <span style="display: flex; gap: 8px; align-items: flex-start; font-size: 14px; font-weight: 700; margin-top: 4px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#3D005C" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M12 21s-7-6.5-7-12a7 7 0 0 1 14 0c0 5.5-7 12-7 12zM12 11.5a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5"></path></svg>${(ag.address)}</span>
+                <span style="font-size: 12px; color: #5A3A6B">${(ag.note)}</span>
+                <button type="button" onClick=${(ag.openChat)} style="font: inherit; margin-top: 6px; min-height: 44px; border-radius: 22px; border: 0; background: #3D005C; color: #FFFFFF; font-size: 14px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 5h16v11H9l-5 4z"></path></svg>Private chat with ${(ag.withName)}</button>
+              </article>
+            `)}
+          </section>
+        ` : null}
+        <p style="margin: 0; font-size: 12px; color: #D4C2E0; line-height: 1.5; text-align: center">Posts show only the neighbourhood and the walking distance to Venue 1 (Google Maps). The exact address is shared only between two dancers once they agree, and the post then leaves this list.</p>
       </div>
     ` : null}
   </div>
@@ -879,6 +1212,111 @@ ${(showPayBar) ? html`
   <div style="position: absolute; left: 0; right: 0; bottom: 76px; padding: 12px 16px; background: #23002F; border-top: 1px solid #4A1A63; display: flex; align-items: center; gap: 12px">
     <span style="display: flex; flex-direction: column; flex: 1"><span style="font-size: 12px; color: #D4C2E0">${(cartCount)} tickets</span><span style="font-size: 20px; font-weight: 700">${(totalLabel)}</span></span>
     <button type="button" onClick=${(payAction)} style=${"font: inherit; min-height: 48px; padding: 0 22px; border-radius: 24px; border: 0; background: " + String((accent)) + "; color: #1A0024; font-weight: 800; letter-spacing: 1px; cursor: pointer"}>${(payLabel)}</button>
+  </div>
+` : null}
+
+${(qrOpen) ? html`
+  <div style="position: absolute; inset: 0; z-index: 23; background: #14001D; display: flex; flex-direction: column; overflow-y: auto">
+    <div style="display: flex; align-items: center; justify-content: space-between; padding: 14px 16px 6px">
+      <button type="button" onClick=${(closeQr)} aria-label="Close" style="font: inherit; width: 44px; height: 44px; border-radius: 22px; border: 1px solid #5A2A75; background: transparent; color: #FFFFFF; font-size: 20px; cursor: pointer">×</button>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 4px; background: #23002F; border-radius: 22px; padding: 4px; width: 230px">
+        <button type="button" onClick=${(showMine)} aria-pressed=${(qrMine)} style=${(qrTabMine)}>My ticket</button>
+        <button type="button" onClick=${(showScan)} aria-pressed=${(qrScan)} style=${(qrTabScan)}>Security view</button>
+      </div>
+    </div>
+    ${(qrMine) ? html`
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 10px 16px 28px; align-items: center; text-align: center">
+        <span style=${"font-size: 11px; font-weight: 800; letter-spacing: 2px; color: " + String((qp.color))}>${(qp.kind)}</span>
+        <span style="font-size: 22px; font-weight: 700; line-height: 1.2">${(qp.title)}</span>
+        <div style="background: #FFFFFF; border-radius: 20px; padding: 16px">
+          <div role="img" aria-label=${(qp.qrLabel)} style="display: grid; grid-template-columns: repeat(21, 9px); gap: 0">
+            ${((qp.cells) || []).map((q, $index) => html`
+              <div style=${(q.s)}></div>
+            `)}
+          </div>
+        </div>
+        <span style="font-family: ui-monospace, Menlo, monospace; font-size: 15px; font-weight: 700; letter-spacing: 2px">${(qp.code)}</span>
+        <div style="width: 100%; background: #23002F; border-radius: 16px; padding: 4px 14px; box-sizing: border-box; text-align: left">
+          ${((qp.rows) || []).map((r, $index) => html`
+            <div style="display: flex; justify-content: space-between; gap: 12px; min-height: 40px; align-items: center; border-bottom: 1px solid #3A0F50; font-size: 13px"><span style="color: #A88BBB">${(r.k)}</span><span style="font-weight: 700; text-align: right">${(r.v)}</span></div>
+          `)}
+        </div>
+        <span style="font-size: 12px; color: #FFD27A; line-height: 1.45">${(qp.rule)}</span>
+        ${(qp.isTable) ? html`
+          <div style="width: 100%; box-sizing: border-box; background: #23002F; border: 1px solid #7FE0D0; border-radius: 16px; padding: 14px; display: flex; flex-direction: column; gap: 10px; text-align: left">
+            <span style="display: flex; justify-content: space-between; align-items: center; gap: 8px"><span style="font-size: 11px; font-weight: 800; letter-spacing: 1.5px; color: #7FE0D0">SHARE YOUR TABLE</span><span style="font-size: 12px; color: #D4C2E0">${(tableSeatsLeft)}</span></span>
+            <span style="font-size: 13px; color: #D4C2E0; line-height: 1.45">Invite up to 3 friends to sit with you. They get an invitation with the table number and night, not a ticket: only you hold the table QR code. The table doesn't include milonga entry, so you and each friend need your own milonga ticket.</span>
+            ${((tableSeats) || []).map((ts, $index) => html`
+              <div style="display: flex; gap: 10px; align-items: center; min-height: 40px; border-top: 1px solid #3A0F50"><span style=${(ts.dot)}></span><span style="display: flex; flex-direction: column; gap: 1px; min-width: 0"><span style="font-size: 13px; font-weight: 700">${(ts.n)}</span><span style="font-size: 11px; color: #A88BBB">${(ts.t)}</span></span></div>
+            `)}
+            ${(tableShared) ? html`
+              <div style="display: flex; justify-content: space-between; align-items: center; gap: 8px; background: #1A0024; border-radius: 12px; padding: 10px 12px; font-size: 13px"><span style="font-family: ui-monospace, Menlo, monospace">${(tableLink)}</span><span style="color: #7FE0D0; font-weight: 700; font-size: 12px">Copied ✓</span></div>
+              ${(canAddGuest) ? html`
+                <button type="button" onClick=${(addGuest)} style="font: inherit; min-height: 40px; border-radius: 20px; border: 1px dashed #A88BBB; background: transparent; color: #D4C2E0; font-size: 12px; font-weight: 700; cursor: pointer">Prototype: simulate a friend accepting</button>
+              ` : null}
+            ` : null}
+            <button type="button" onClick=${(shareTable)} style="font: inherit; min-height: 46px; border-radius: 23px; border: 0; background: #7FE0D0; color: #1A0024; font-size: 14px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 12v7a1 1 0 0 0 1 1h14a1 1 0 0 0 1-1v-7M16 6l-4-4-4 4M12 2v13"></path></svg>Invite friends to my table</button>
+          </div>
+        ` : null}
+        <span style="font-size: 11px; color: #A88BBB">Turn up your screen brightness at the door. The code refreshes every 30 seconds, so screenshots won't work.</span>
+      </div>
+    ` : null}
+    ${(qrScan) ? html`
+      <div style="display: flex; flex-direction: column; gap: 14px; padding: 10px 16px 28px">
+        <span style="font-size: 12px; color: #A88BBB; text-align: center">Preview of the staff scanner app after scanning this code</span>
+        <div style="background: #0E7A5F; border-radius: 20px; padding: 22px 16px; display: flex; flex-direction: column; align-items: center; gap: 6px; text-align: center">
+          <span style="width: 64px; height: 64px; border-radius: 32px; background: #FFFFFF; color: #0E7A5F; font-size: 36px; font-weight: 800; display: flex; align-items: center; justify-content: center">✓</span>
+          <span style="font-size: 24px; font-weight: 800; letter-spacing: 1px">${(qp.scanVerdict)}</span>
+          <span style="font-size: 14px; font-weight: 600">${(qp.scanAllow)}</span>
+        </div>
+        <div style="background: #23002F; border-radius: 16px; padding: 4px 14px">
+          ${((qp.scanRows) || []).map((r, $index) => html`
+            <div style="display: flex; justify-content: space-between; gap: 12px; min-height: 40px; align-items: center; border-bottom: 1px solid #3A0F50; font-size: 13px"><span style="color: #A88BBB">${(r.k)}</span><span style="font-weight: 700; text-align: right">${(r.v)}</span></div>
+          `)}
+        </div>
+        <div style="background: #23002F; border: 1px solid #FFD27A; border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.45"><strong style="color: #FFD27A">Staff check:</strong> ${(qp.staffCheck)}</div>
+        <span style="font-size: 12px; color: #A88BBB; line-height: 1.45">A second scan of the same code shows a red <strong>ALREADY USED</strong> (except for multi-night passes, one entry per night), and a code for another day or room shows <strong>NOT VALID HERE</strong>.</span>
+      </div>
+    ` : null}
+  </div>
+` : null}
+
+${(switchOpen) ? html`
+  <div style="position: absolute; inset: 0; z-index: 22; display: flex; flex-direction: column; justify-content: flex-end">
+    <button type="button" onClick=${(cancelSwitch)} aria-label="Cancel" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(10, 0, 15, 0.8); cursor: pointer"></button>
+    <div role="alertdialog" aria-label="Change account type" style="position: relative; background: #23002F; border-top: 2px solid #FFD27A; border-radius: 24px 24px 0 0; padding: 12px 16px 28px; display: flex; flex-direction: column; gap: 12px">
+      <span style="align-self: center; width: 40px; height: 4px; border-radius: 2px; background: #5A2A75; margin-bottom: 4px"></span>
+      <span style="font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #FFD27A">${(switchStepLabel)}</span>
+      <span style="font-size: 20px; font-weight: 700">${(switchTitle)}</span>
+      ${(switchStep1) ? html`
+        <span style="font-size: 13px; color: #D4C2E0">This changes:</span>
+        <div style="display: flex; flex-direction: column; gap: 8px">
+          ${((switchChanges) || []).map((sc, $index) => html`
+            <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.45; background: #1A0024; border-radius: 12px; padding: 10px 12px"><span style="color: #FFD27A; font-weight: 800; flex-shrink: 0">!</span><span>${(sc)}</span></div>
+          `)}
+        </div>
+        <button type="button" onClick=${(switchNext)} style="font: inherit; min-height: 52px; border-radius: 26px; border: 1px solid #FFD27A; background: transparent; color: #FFD27A; font-size: 15px; font-weight: 800; cursor: pointer">I UNDERSTAND, CONTINUE</button>
+      ` : null}
+      ${(switchStep2) ? html`
+        <span style="font-size: 14px; color: #D4C2E0; line-height: 1.5">${(switchFinalText)}</span>
+        <button type="button" onClick=${(switchConfirm)} style="font: inherit; min-height: 52px; border-radius: 26px; border: 0; background: #FFD27A; color: #1A0024; font-size: 15px; font-weight: 800; cursor: pointer">${(switchConfirmLabel)}</button>
+      ` : null}
+      <button type="button" onClick=${(cancelSwitch)} style="font: inherit; min-height: 48px; border-radius: 24px; border: 0; background: transparent; color: #FFFFFF; font-size: 14px; font-weight: 700; cursor: pointer">Cancel, keep my account as it is</button>
+    </div>
+  </div>
+` : null}
+
+${(gateOpen) ? html`
+  <div style="position: absolute; inset: 0; z-index: 21; display: flex; flex-direction: column; justify-content: flex-end">
+    <button type="button" onClick=${(closeGate)} aria-label="Close" style="position: absolute; inset: 0; border: 0; padding: 0; background: rgba(10, 0, 15, 0.72); cursor: pointer"></button>
+    <div role="dialog" aria-label="Dancer profile needed" style="position: relative; background: #23002F; border-top: 1px solid #5A2A75; border-radius: 24px 24px 0 0; padding: 12px 16px 28px; display: flex; flex-direction: column; gap: 12px">
+      <span style="align-self: center; width: 40px; height: 4px; border-radius: 2px; background: #5A2A75; margin-bottom: 4px"></span>
+      <span style="font-size: 20px; font-weight: 700">${(gateTitle)}</span>
+      <span style="font-size: 14px; color: #D4C2E0; line-height: 1.5">${(gateText)}</span>
+      <button type="button" onClick=${(gateRegister)} style=${"font: inherit; min-height: 52px; border-radius: 26px; border: 0; background: " + String((accent)) + "; color: #1A0024; font-size: 15px; font-weight: 800; letter-spacing: 0.5px; cursor: pointer"}>CREATE MY DANCER PROFILE</button>
+      <button type="button" onClick=${(gateSignIn)} style="font: inherit; min-height: 52px; border-radius: 26px; border: 1px solid #FFFFFF; background: transparent; color: #FFFFFF; font-size: 15px; font-weight: 700; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 4H5a1 1 0 0 0-1 1v2M17 4h2a1 1 0 0 1 1 1v2M7 20H5a1 1 0 0 1-1-1v-2M17 20h2a1 1 0 0 0 1-1v-2M9 9v1M15 9v1M12 9v4h-1M9 16c1.5 1.2 4.5 1.2 6 0"></path></svg>I have an account · Sign in</button>
+      <span style="font-size: 12px; color: #A88BBB; text-align: center">Sign in with Face ID, Touch ID or your fingerprint (passkey), or with your email and password.</span>
+    </div>
   </div>
 ` : null}
 
@@ -922,15 +1360,18 @@ class Component extends DCLogic {
     let screen = st;
     if (st === 'partners') screen = 'classes';
     if (st === 'housing' || st === 'explore') screen = 'lisbon';
-    this._reg0 = { name: '', email: '', phone: '', age: '', gender: '', city: '', country: '', leader: false, follower: false, level: '', avatar: 0, photo: null };
+    const chatStart = { 'chat-partner': 'c1', 'chat-housing': 'c2', 'chat-org': 'c3' }[st];
+    if (chatStart) screen = 'chat';
+    this._reg0 = { accountType: 'single', partnerName: '', password: '', passkey: true, name: '', email: '', phone: '', age: '', gender: '', city: '', country: '', leader: false, follower: false, level: '', avatar: 0, photo: null };
     this.state = {
       screen: screen, day: 'wed', cDay: 'thu', saved: { 'wed-show': true },
       openClass: st === 'partners' ? 'thu-0' : null,
       role: 'follower', looking: true, sent: {}, incoming: {},
-      cart: st === 'tickets' ? { 'all-ev': 1, 'class': 2 } : {}, step: 'cart', pay: 'apple',
-      lisbonTab: st === 'housing' ? 'housing' : 'explore', exCat: 'eat', hFilter: 'offer', hSent: {}, newListing: false, lang: 'en', langOpen: false, dayIdx: 0, reg: this._reg0, registered: false,
+      cart: st === 'tickets' ? { 'vip': 2 } : {}, step: 'cart', pay: 'apple',
+      lisbonTab: st === 'housing' ? 'housing' : 'explore', exCat: 'eat', hFilter: 'offer', hSent: {}, newListing: false, lang: 'en', langOpen: false, dayIdx: 0, reg: this._reg0, registered: false, myListings: [], postDone: null,
+      post: { kind: 'offer', address: '', link: '', type: '', beds: 1, from: '2027-05-25', to: '2027-05-31', price: '', open: '', desc: '', areas: {} },
       myClasses: { 'thu-0': 'booked', 'thu-3': 'following', 'fri-2': 'booked', 'sat-1': 'following' }, homeDay: 'thu',
-      owned: [{ n: 'All 5 Gran Milongas', qty: 1, total: '€140' }], read: {}, extra: {}, chatId: null, draft: '', editProfile: false
+      owned: [{ n: 'All 5 Gran Milongas', qty: 1, total: '€140' }, { n: 'Class ticket', qty: 2, total: '€50' }], read: {}, extra: {}, chatId: chatStart || null, draft: '', editProfile: false
     };
   }
 
@@ -992,6 +1433,7 @@ class Component extends DCLogic {
     const dayDrag = drag('days', 290), mDrag = drag('maestros', 0), djDrag = drag('djs', 0);
     const dayIdx = s.dayIdx || 0;
     const set = (o) => () => this.setState(o);
+    const gate = (kind, fn) => (...args) => { if (!this.state.registered) { this.setState({ gate: kind }); return; } return fn(...args); };
     const chip = (on) => 'font: inherit; flex: 1; min-height: 60px; border-radius: 16px; cursor: pointer; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; padding: 0; ' + (on ? 'background: ' + accent + '; color: #1A0024; border: 1px solid ' + accent + ';' : 'background: #23002F; color: #FFFFFF; border: 1px solid #4A1A63;');
     const pill = (on) => 'font: inherit; min-height: 44px; padding: 0 16px; border-radius: 22px; cursor: pointer; font-size: 14px; font-weight: 600; white-space: nowrap; ' + (on ? 'background: ' + accent + '; color: #1A0024; border: 1px solid ' + accent + ';' : 'background: transparent; color: #FFFFFF; border: 1px solid #5A2A75;');
     const eur = (n) => '€' + n;
@@ -1232,11 +1674,92 @@ class Component extends DCLogic {
     if (!reg.name.trim()) missing.push('your name');
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((reg.email || '').trim())) missing.push('a valid email');
     if (!reg.country) missing.push('country');
-    if (!reg.leader && !reg.follower) missing.push('leader or follower');
+    if (reg.accountType !== 'couple' && !reg.leader && !reg.follower) missing.push('leader or follower');
     if (!reg.level) missing.push('dancing level');
+    if ((reg.password || '').length < 8 && !s.registered) missing.push('a password (8+ characters)');
+    if (reg.accountType === 'couple' && !(reg.partnerName || '').trim()) missing.push("your partner's name");
     const regValid = missing.length === 0;
-    const regRoleText = reg.leader && reg.follower ? 'Leader & follower' : (reg.leader ? 'Leader' : (reg.follower ? 'Follower' : ''));
+    const isCouple = !!s.registered && reg.accountType === 'couple';
+    const regRoleText = reg.accountType === 'couple' || (reg.leader && reg.follower) ? 'Leader & follower' : (reg.leader ? 'Leader' : (reg.follower ? 'Follower' : ''));
     const regLevelText = (levelDefs.find((l) => l.id === reg.level) || { n: '' }).n;
+
+    // POST A ROOM / REQUEST A ROOM
+    const post0 = { kind: 'offer', address: '', link: '', type: '', beds: 1, from: '2027-05-25', to: '2027-05-31', price: '', open: '', desc: '', areas: {} };
+    const post = s.post || post0;
+    const setP = (k, v) => this.setState({ post: { ...(this.state.post || post0), [k]: v } });
+    const isOffer = true;
+    const areasList = ['Graça', 'São Vicente', 'Alfama', 'Mouraria', 'Baixa', 'Chiado', 'Arroios', 'Other'];
+    const typeDefs = isOffer ? ['Private room', 'Shared room with double bed', 'Sofa in the living room'] : ['Any', 'Private room', 'Shared room with double bed', 'Sofa in the living room'];
+    // Prototype stand-in for Google Maps geocoding + walking directions to Venue 1 (R. Voz do Operário, 13)
+    const addr = (post.address || '').trim();
+    const locFor = (txt) => {
+      const low = txt.toLowerCase();
+      const known = [['voz do oper', 'São Vicente', 2], ['graça', 'Graça', 5], ['graca', 'Graça', 5], ['vicente', 'São Vicente', 4], ['alfama', 'Alfama', 11], ['mouraria', 'Mouraria', 12], ['martim moniz', 'Mouraria', 14], ['baixa', 'Baixa', 20], ['chiado', 'Chiado', 26], ['arroios', 'Arroios', 22], ['penha de fran', 'Penha de França', 15], ['santa apol', 'Alfama', 9]];
+      const k = known.find((x) => low.indexOf(x[0]) >= 0);
+      let h = 0; for (let i = 0; i < txt.length; i++) h = (h * 31 + txt.charCodeAt(i)) % 997;
+      const area = k ? k[1] : ['Graça', 'São Vicente', 'Alfama', 'Mouraria'][h % 4];
+      const mins = k ? k[2] : 4 + (h % 14);
+      return { area: area, mins: mins, walk: mins + ' min walk to Venue 1' };
+    };
+    const postLoc = addr.length >= 6 ? locFor(addr) : { area: '', mins: 0, walk: '' };
+    const openDefs = [{ id: 'anyone', n: 'Anyone' }, { id: 'women', n: 'Women only' }, { id: 'men', n: 'Men only' }];
+    const pDays = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || ''); return m ? Date.UTC(+m[1], +m[2] - 1, +m[3]) / 86400000 : NaN; };
+    const nights = pDays(post.to) - pDays(post.from);
+    const monthN = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const fmtD = (d) => { const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(d || ''); return m ? (+m[3]) + ' ' + monthN[+m[2] - 1] : ''; };
+    const fmtRange = () => { const a = /-(\d{2})-(\d{2})$/.exec(post.from || ''), b = /-(\d{2})-(\d{2})$/.exec(post.to || ''); if (!a || !b) return ''; return a[1] === b[1] ? (+a[2]) + ' – ' + fmtD(post.to) : fmtD(post.from) + ' – ' + fmtD(post.to); };
+    const pMissing = [];
+    if (isOffer) {
+      if (addr.length < 6) pMissing.push('the address');
+      if (!post.type) pMissing.push('type of place');
+      if (!post.price) pMissing.push('price per night');
+    } else {
+      if (!Object.keys(post.areas).some((k) => post.areas[k])) pMissing.push('at least one area');
+      if (!post.type) pMissing.push('what you are looking for');
+    }
+    if (!(nights > 0)) pMissing.push('valid dates');
+    const postValid = pMissing.length === 0;
+    const selStyle = (on) => pill(on);
+    const meLine = (reg.name.trim() || 'You') + (regRoleText ? ' · ' + regRoleText : '');
+    const makePost = () => {
+      const id = 'my' + Date.now();
+      const chosenAreas = areasList.filter((a) => post.areas[a]);
+      const n = post.beds;
+      if (isOffer) {
+        const openTxt = post.open === 'women' ? ' · Women only' : (post.open === 'men' ? ' · Men only' : '');
+        return { id: id, kind: 'offer', mine: true, status: 'public', address: addr, link: (post.link || '').trim(), t: post.type + ' in ' + postLoc.area, a: postLoc.area, w: postLoc.walk, b: post.type + openTxt, dt: fmtRange(), p: '€' + post.price + ' / night', h: meLine, photo: null, req: { n: 'Yuki · Japan · Follower', i: 'Y' } };
+      }
+      return { id: id, kind: 'look', mine: true, status: 'public', t: 'Looking for ' + (post.type === 'Any' ? 'a place to stay' : post.type.toLowerCase()), a: chosenAreas.join(' or '), w: 'Walking distance', b: n + (n === 1 ? ' person' : ' people'), dt: fmtRange(), p: post.price ? 'Up to €' + post.price : 'Budget open', h: meLine, photo: null };
+    };
+    const lastPost = (s.myListings || []).find((l) => l.id === s.postDone) || { t: '', a: '', w: '', b: '', dt: '', p: '' };
+    const postVals = {
+      isPostForm: s.screen === 'post' && !s.postDone, isPostDone: s.screen === 'post' && !!s.postDone, post: post, lastPost: lastPost,
+      postHeading: isOffer ? 'Offer a room' : 'Request a room',
+      postIsOffer: isOffer, postIsRequest: !isOffer,
+      postKinds: [{ id: 'offer', n: 'I have a room' }, { id: 'look', n: 'I need a room' }].map((k) => ({ ...k, on: post.kind === k.id, pick: () => this.setState({ post: { ...(this.state.post || post0), kind: k.id, type: '' } }),
+        style: 'font: inherit; min-height: 44px; border-radius: 20px; border: 0; cursor: pointer; font-size: 14px; font-weight: 700; ' + (post.kind === k.id ? 'background: ' + accent + '; color: #1A0024;' : 'background: transparent; color: #FFFFFF;') })),
+      onPostAddress: (e) => setP('address', e.target.value), onPostLink: (e) => setP('link', e.target.value), postHasLoc: addr.length >= 6, postLoc: postLoc,
+      postPrivacyNote: isOffer ? 'Before you agree, dancers only see the neighbourhood, the walking distance, the type of place, dates and price. When you accept someone, the address is shared with that person only and the post leaves the public list.' : 'Hosts see your request without your contact details. When a host accepts, you both get a private post with the exact address.',
+      onPostFrom: (e) => setP('from', e.target.value), onPostTo: (e) => setP('to', e.target.value), onPostPrice: (e) => setP('price', e.target.value), onPostDesc: (e) => setP('desc', e.target.value),
+      postAreaOptions: areasList.map((v) => ({ v: v })),
+      postTypes: typeDefs.map((n) => ({ n: n, on: post.type === n, pick: () => setP('type', n), style: selStyle(post.type === n),
+        dot: 'width: 18px; height: 18px; flex-shrink: 0; border-radius: 9px; box-sizing: border-box; ' + (post.type === n ? 'border: 5px solid #1A0024; background: #FFFFFF;' : 'border: 2px solid #A88BBB;'),
+        rowStyle: 'font: inherit; text-align: left; min-height: 50px; padding: 0 14px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; gap: 12px; font-size: 15px; font-weight: 600; ' + (post.type === n ? 'background: ' + accent + '; color: #1A0024; border: 0;' : 'background: #23002F; color: #FFFFFF; border: 1px solid #5A2A75;') })),
+      reqAreas: areasList.filter((a) => a !== 'Other').concat(['Anywhere close']).map((n) => ({ n: n, on: !!post.areas[n], toggle: () => setP('areas', { ...(this.state.post || post0).areas, [n]: !(this.state.post || post0).areas[n] }), style: selStyle(!!post.areas[n]) })),
+      postOpen: openDefs.map((o) => ({ ...o, on: post.open === o.id, pick: () => setP('open', (this.state.post || post0).open === o.id ? '' : o.id), style: selStyle(post.open === o.id) })),
+      bedsDec: () => setP('beds', Math.max(1, (this.state.post || post0).beds - 1)), bedsInc: () => setP('beds', Math.min(8, (this.state.post || post0).beds + 1)),
+      postNights: nights > 0 ? nights + (nights === 1 ? ' night' : ' nights') + ' · ' + fmtRange() : 'Check-out must be after check-in',
+      postPriceLabel: isOffer ? 'PRICE PER NIGHT' : 'MAXIMUM BUDGET PER NIGHT · OPTIONAL',
+      postPricePh: isOffer ? 'e.g. 35' : 'e.g. 40', postPriceUnit: 'per night',
+      postDescLabel: isOffer ? 'ABOUT THE PLACE' : 'ABOUT YOU',
+      postDescPh: isOffer ? 'Light, quiet street, 2 flights of stairs, you share the bathroom with one tanguera…' : 'Who you are, when you arrive, if you dance late and sleep late…',
+      postMissing: !postValid, postHint: 'Still needed: ' + pMissing.join(', '),
+      postBtnLabel: isOffer ? 'PUBLISH MY ROOM' : 'PUBLISH MY REQUEST',
+      postBtnStyle: 'font: inherit; min-height: 54px; border-radius: 27px; border: 0; font-size: 15px; font-weight: 800; letter-spacing: 1px; cursor: ' + (postValid ? 'pointer' : 'not-allowed') + '; ' + (postValid ? 'background: ' + accent + '; color: #1A0024;' : 'background: #3D005C; color: #A88BBB;'),
+      postSubmit: (e) => { if (e && e.preventDefault) e.preventDefault(); if (!postValid) return; const np = makePost(); this.setState({ myListings: [np].concat(this.state.myListings || []), postDone: np.id, hFilter: np.kind }); },
+      seeHousing: () => this.setState({ screen: 'lisbon', lisbonTab: 'housing', hFilter: lastPost.kind || 'offer', postDone: null, post: post0 }),
+      postAnother: () => this.setState({ postDone: null, post: post0 })
+    };
 
     const roleDefs = [{ id: 'leader', n: 'Leader' }, { id: 'follower', n: 'Follower' }, { id: 'both', n: 'Both' }];
     const roleName = { leader: 'Leader', follower: 'Follower', both: 'Leader & follower' };
@@ -1257,15 +1780,17 @@ class Component extends DCLogic {
       const sent = !!s.sent[key];
       return {
         ...p, i: p.n.charAt(0), roleLabel: roleName[p.r], btn: sent ? 'Requested' : 'Request',
-        btnStyle: 'font: inherit; min-height: 40px; padding: 0 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; flex-shrink: 0; ' + (sent ? 'background: transparent; color: #FFFFFF; border: 1px solid #5A2A75;' : 'background: ' + accent + '; color: #1A0024; border: 0;'),
-        request: () => this.setState({ sent: { ...s.sent, [key]: !sent } })
+        btnStyle: 'font: inherit; min-height: 40px; padding: 0 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; flex-shrink: 0; ' + (isCouple ? 'display: none; ' : '') + (sent ? 'background: transparent; color: #FFFFFF; border: 1px solid #5A2A75;' : 'background: ' + accent + '; color: #1A0024; border: 0;'),
+        request: gate('classes', () => this.setState({ sent: { ...s.sent, [key]: !sent } })),
+        chatLabel: 'Message ' + p.n,
+        chat: gate('classes', () => this.setState({ dm: { ...(this.state.dm || {}), ['pc-' + key]: { type: 'pc', cid: cls.id, pid: p.id } }, screen: 'chat', chatId: 'pc-' + key, draft: '', linkMode: false, read: { ...s.read, ['pc-' + key]: true } }))
       };
     });
     const hasIncoming = inc === 'pending' && s.role !== 'leader';
 
     // TICKETS
     const tGroupsRaw = [
-      { g: 'Tango & Fado Live Show', note: 'Wed 26 May · 21:00 · first come, first served seating', items: [
+      { g: 'Tango & Fado Live Show', note: 'Wed 26 May · 21:00 · up to 4 tickets per order, enough for a whole VIP table · no account needed', items: [
         { id: 'vip', n: 'VIP table seat', d: '1 seat at a table of 4 · shared champagne', p: 50 },
         { id: 'balc', n: 'Balcony seat', d: 'No assigned seats', p: 25 }] },
       { g: 'Evening Gran Milongas', note: '22:00 – 04:00 (Wed from 23:00) · no assigned seats', items: [
@@ -1274,25 +1799,48 @@ class Component extends DCLogic {
         { id: 'ev-fri', n: 'Friday', d: '28 May', p: 35 }, { id: 'ev-sat', n: 'Saturday', d: '29 May', p: 40 },
         { id: 'ev-sun', n: 'Sunday', d: '30 May', p: 30 }] },
       { g: 'Reserved milonga tables', note: '4 seats, per night · sold in addition to milonga tickets', items: [
-        { id: 'tb-a', n: 'Table · Wed, Thu or Sun', d: 'Exclusive use for one night', p: 40 },
-        { id: 'tb-b', n: 'Table · Fri or Sat', d: 'Exclusive use for one night', p: 60 }] },
+        { id: 'tb-a', n: 'Table · Wed, Thu or Sun', d: '4 seats, one night · milonga entry not included', p: 40, nights: ['Wed 26 May', 'Thu 27 May', 'Sun 30 May'] },
+        { id: 'tb-b', n: 'Table · Fri or Sat', d: '4 seats, one night · milonga entry not included', p: 60, nights: ['Fri 28 May', 'Sat 29 May'] }] },
       { g: 'Afternoon Milongas', note: '16:00 – 20:00 · Thursday to Sunday', items: [
         { id: 'all-af', n: 'All 4 afternoon milongas', d: 'Discount package · best value', p: 50 },
         { id: 'af', n: 'Single afternoon milonga', d: 'Thu, Fri, Sat or Sun', p: 15 }] },
       { g: 'Classes', note: 'Group class · 1 h 15 min', items: [
-        { id: 'class', n: 'Class ticket', d: 'Choose your classes in the Classes tab', p: 25 }] }
+        { id: 'class', n: 'Class ticket', d: 'One ticket per class you book · choose your classes in the Classes tab', p: 25 }] }
     ];
     const cart = s.cart;
     const allItems = [];
     tGroupsRaw.forEach((g) => g.items.forEach((it) => allItems.push(it)));
-    const setQty = (id, q) => this.setState({ cart: { ...cart, [id]: Math.max(0, q) } });
+    const mult = isCouple ? 2 : 1;
+    const setQty = (id, q) => {
+      if ((id === 'vip' || id === 'balc') && q > (cart[id] || 0)) { const other = id === 'vip' ? (cart.balc || 0) : (cart.vip || 0); if ((q + other) * mult > 4) return; }
+      if (id !== 'vip' && id !== 'balc' && id !== 'class' && q > (cart[id] || 0)) { const it = allItems.find((x) => x.id === id); const own = (s.owned || []).filter((o) => (o.base || o.n) === it.n).reduce((a, o) => a + o.qty, 0); if (q + own > 1) return; }
+      this.setState({ cart: { ...cart, [id]: Math.max(0, q) } });
+    };
     const tGroups = tGroupsRaw.map((g) => ({ ...g, items: g.items.map((it) => {
       const q = cart[it.id] || 0;
-      return { ...it, sub: it.d, qty: q, price: eur(it.p), inc: () => setQty(it.id, q + 1), dec: () => setQty(it.id, q - 1), incLabel: 'Add one ' + it.n, decLabel: 'Remove one ' + it.n };
+      const ownedQty = (s.owned || []).filter((o) => (o.base || o.n) === it.n).reduce((acc, o) => acc + o.qty, 0);
+      const has = (name) => (s.owned || []).some((o) => (o.base || o.n) === name);
+      const inCartP = (name) => allItems.some((x) => x.n === name && (cart[x.id] || 0) > 0);
+      const coveredInCart = !ownedQty && ((/^ev-/.test(it.id) && inCartP('All 5 Gran Milongas')) || (it.id === 'af' && inCartP('All 4 afternoon milongas')));
+      const includedIn = ownedQty ? '' : (/^ev-/.test(it.id) && has('All 5 Gran Milongas') ? 'All 5 Gran Milongas pass' : (it.id === 'af' && has('All 4 afternoon milongas') ? 'All 4 afternoon milongas pass' : ''));
+      const atMax = (it.id === 'vip' || it.id === 'balc') ? ((cart.vip || 0) + (cart.balc || 0) + 1) * mult > 4 : (it.id === 'class' ? false : q + ownedQty >= 1 || !!includedIn);
+      const multi = it.id === 'vip' || it.id === 'balc' || it.id === 'class';
+      const unavailable = !multi && (ownedQty > 0 || !!includedIn || coveredInCart);
+      const incFn = it.id === 'class' ? gate('classes', () => setQty(it.id, q + 1)) : () => setQty(it.id, q + 1);
+      const tBase = 'font: inherit; min-width: 92px; min-height: 36px; padding: 0 12px; border-radius: 18px; font-size: 13px; font-weight: 800; letter-spacing: 0.3px; ';
+      const nightSel = (s.tableNight || {})[it.id] || (it.nights ? it.nights[0] : '');
+      const nightChips = (it.nights || []).map((nn) => ({ n: nn.replace(' May', ''), on: nn === nightSel, pick: () => this.setState({ tableNight: { ...(this.state.tableNight || {}), [it.id]: nn } }),
+        style: 'font: inherit; min-height: 32px; padding: 0 12px; border-radius: 16px; font-size: 12px; font-weight: 700; cursor: pointer; ' + (nn === nightSel ? 'background: #7FE0D0; color: #1A0024; border: 0;' : 'background: transparent; color: #FFFFFF; border: 1px solid #5A2A75;') }));
+      return { ...it, hasNights: !!it.nights && q > 0, nightChips: nightChips, multi: multi, single: !multi, inCart: q > 0, unavailable: unavailable, atMin: q === 0,
+        decStyle: 'font: inherit; width: 36px; height: 36px; border-radius: 18px; font-size: 18px; padding: 0; background: transparent; ' + (q === 0 ? 'border: 1px solid #3A1A4A; color: #5A3A6A; cursor: not-allowed;' : 'border: 1px solid #5A2A75; color: #FFFFFF; cursor: pointer;'),
+        toggle: unavailable ? () => {} : (q > 0 ? () => setQty(it.id, 0) : incFn),
+        toggleLabel: unavailable ? (ownedQty > 0 ? 'Bought' : 'Included') : (q > 0 ? '\u2713 Remove' : '+ Add ticket'),
+        toggleStyle: tBase + (unavailable ? 'border: 0; background: #3A1A4A; color: #7A5A8A; cursor: not-allowed;' : (q > 0 ? 'border: 1px solid #F843AA; background: #3D005C; color: #FFFFFF; cursor: pointer;' : 'border: 0; background: #F843AA; color: #1A0024; cursor: pointer;')),
+        atMax: atMax, incStyle: 'font: inherit; width: 36px; height: 36px; border-radius: 18px; border: 0; font-size: 18px; font-weight: 700; padding: 0; ' + (atMax ? 'background: #3A1A4A; color: #7A5A8A; cursor: not-allowed;' : 'background: #F843AA; color: #1A0024; cursor: pointer;'), sub: it.d, qty: q, price: eur(it.p * mult), isOwned: ownedQty > 0, ownedLabel: 'BOUGHT' + (ownedQty > 1 ? ' ×' + ownedQty : ''), isIncluded: !!includedIn, includedIn: includedIn, inc: it.id === 'class' ? gate('classes', () => setQty(it.id, q + 1)) : () => setQty(it.id, q + 1), dec: () => setQty(it.id, q - 1), incLabel: 'Add one ' + it.n, decLabel: 'Remove one ' + it.n };
     }) }));
-    const cartLines = allItems.filter((it) => (cart[it.id] || 0) > 0).map((it) => ({ n: it.n, qty: cart[it.id], total: eur(cart[it.id] * it.p) }));
+    const cartLines = allItems.filter((it) => (cart[it.id] || 0) > 0).map((it) => ({ base: it.n, night: it.nights ? ((s.tableNight || {})[it.id] || it.nights[0]) : '', n: it.n + (it.nights ? ' · ' + ((s.tableNight || {})[it.id] || it.nights[0]) : '') + (isCouple ? ' (couple)' : ''), qty: cart[it.id], total: eur(cart[it.id] * it.p * mult) }));
     const cartCount = allItems.reduce((a, it) => a + (cart[it.id] || 0), 0);
-    const total = allItems.reduce((a, it) => a + (cart[it.id] || 0) * it.p, 0);
+    const total = allItems.reduce((a, it) => a + (cart[it.id] || 0) * it.p * mult, 0);
     const payDefs = [{ id: 'apple', n: 'Apple Pay' }, { id: 'google', n: 'Google Pay' }, { id: 'mbway', n: 'MB WAY' }, { id: 'card', n: 'Credit or debit card' }];
     const payMethods = payDefs.map((m) => ({ ...m, on: s.pay === m.id, dot: s.pay === m.id ? '#F843AA' : 'transparent',
       style: 'font: inherit; min-height: 54px; padding: 0 16px; border-radius: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; color: #FFFFFF; background: #23002F; border: 1px solid ' + (s.pay === m.id ? '#F843AA' : '#4A1A63') + ';',
@@ -1312,9 +1860,59 @@ class Component extends DCLogic {
         qr.push({ s: 'width: 9px; height: 9px; background: ' + (on ? '#14001D' : '#FFFFFF') + ';' });
       }
     }
+    const qrFor = (seed) => { const out = []; let h = 0; for (let i = 0; i < seed.length; i++) h = (h * 31 + seed.charCodeAt(i)) % 9973;
+      for (let y = 0; y < 21; y++) for (let x = 0; x < 21; x++) {
+        const inF = (fx, fy) => x >= fx && x < fx + 7 && y >= fy && y < fy + 7;
+        const f = inF(0, 0) ? [0, 0] : inF(14, 0) ? [14, 0] : inF(0, 14) ? [0, 14] : null; let on;
+        if (f) { const dx = x - f[0], dy = y - f[1]; on = dx === 0 || dx === 6 || dy === 0 || dy === 6 || (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4); }
+        else on = ((x * 7 + y * 13 + x * y + h) % 5) < 2;
+        out.push({ s: 'width: 9px; height: 9px; background: ' + (on ? '#14001D' : '#FFFFFF') + ';' });
+      } return out; };
+    const regP = s.reg || this._reg0;
+    const coupleP = !!s.registered && regP.accountType === 'couple';
+    const holder = s.registered ? (coupleP ? (regP.name || '').trim() + ' & ' + (regP.partnerName || '').trim() : (regP.name || '').trim()) : 'Guest · ' + (s.guestEmail || 'email at checkout');
+    const admitsTxt = coupleP ? '2 people (leader + follower)' : '1 person';
+    const codeFor = (seed) => { let h = 7; for (let i = 0; i < seed.length; i++) h = (h * 131 + seed.charCodeAt(i)) % 1679616; return 'LTF27-' + h.toString(36).toUpperCase().padStart(4, '0'); };
+    const evDays = { Wednesday: 'Wed 26 May', Thursday: 'Thu 27 May', Friday: 'Fri 28 May', Saturday: 'Sat 29 May', Sunday: 'Sun 30 May' };
+    const personalRule = 'Personal ticket for ' + (coupleP ? 'the two of you' : 'you') + ' only, not transferable. Staff may ask for ID matching the holder name.';
+    const passList = [];
+    (s.owned || []).forEach((o, oi) => {
+      const n = (o.base || o.n).replace(' (couple)', '');
+      if (n === 'Class ticket') return;
+      if (n === 'VIP table seat' || n === 'Balcony seat') {
+        for (let i = 0; i < o.qty; i++) passList.push({ id: 'show-' + oi + '-' + i, kind: 'TANGO & FADO SHOW', color: '#FFD27A', title: n + ' ' + (i + 1) + ' of ' + o.qty,
+          short: 'Wed 26 May · 21:00 · Venue 1',
+          rows: [['When', 'Wed 26 May · doors 20:30'], ['Where', 'Venue 1 · show entrance'], ['Seat', n === 'VIP table seat' ? 'VIP table 3 · seat ' + (i + 1) : 'Balcony · free seating'], ['Admits', coupleP ? '2 people' : '1 person']],
+          rule: 'Show seats are the only tickets you can pass on: forward this code to the friend using this seat.',
+          verdict: 'VALID · ENTRY OK', allow: 'Tango & Fado Live Show · ' + n, where: 'Show entrance · Venue 1', check: 'Show the guest to ' + (n === 'VIP table seat' ? 'VIP table 3.' : 'the balcony.') + ' No ID needed for show seats.' });
+        return;
+      }
+      let p = null;
+      if (n === 'All 5 Gran Milongas') p = { kind: 'MILONGA PASS', color: '#F843AA', short: 'Wed 26 – Sun 30 May · 22:00 – 04:00', rows: [['Valid', 'All 5 evenings · Wed 26 – Sun 30 May'], ['Time', '22:00 – 04:00'], ['Where', 'Venue 1 entrance']], allow: 'Evening Gran Milonga · tonight (night 1 of 5)', where: 'Venue 1 entrance', check: 'First scan: give the festival wristband. One entry per night.' };
+      else if (evDays[n]) p = { kind: 'EVENING MILONGA', color: '#F843AA', title: 'Gran Milonga · ' + n, short: evDays[n] + ' · 22:00 – 04:00', rows: [['Valid', evDays[n] + ' only'], ['Time', '22:00 – 04:00'], ['Where', 'Venue 1 entrance']], allow: 'Evening Gran Milonga · ' + evDays[n], where: 'Venue 1 entrance', check: 'Valid for this one night only.' };
+      else if (n === 'All 4 afternoon milongas') p = { kind: 'AFTERNOON PASS', color: '#C9A6FF', short: 'Thu 27 – Sun 30 May · 16:00 – 20:00', rows: [['Valid', 'All 4 afternoons · Thu 27 – Sun 30 May'], ['Time', '16:00 – 20:00'], ['Where', 'Venue 2 entrance']], allow: 'Afternoon milonga · today (1 of 4)', where: 'Venue 2 entrance', check: 'One entry per afternoon.' };
+      else if (n === 'Single afternoon milonga') p = { kind: 'AFTERNOON MILONGA', color: '#C9A6FF', short: 'One afternoon · 16:00 – 20:00', rows: [['Valid', 'One afternoon of your choice'], ['Time', '16:00 – 20:00'], ['Where', 'Venue 2 entrance']], allow: 'Afternoon milonga · one entry', where: 'Venue 2 entrance', check: 'Single entry, then the code is used.' };
+      else if (/^Table/.test(n)) { const night = o.night || (/Fri or Sat/.test(n) ? 'Sat 29 May' : 'Thu 27 May'); const joined = s.tableGuests || [];
+        p = { kind: 'RESERVED TABLE', verdict: 'VALID · TABLE 12', color: '#7FE0D0', title: 'Reserved table · ' + night, short: 'Table 12 · 4 seats · ' + night, isTable: true, rows: [['Night', night], ['Table', 'Table 12 · 4 seats'], ['Includes', 'Table only · no milonga entry'], ['Where', 'Gran Milonga · Venue 1'], ['Friends invited', joined.length ? joined.map((g) => g.n.split(' ')[0]).join(', ') : 'none yet']],
+          allow: 'Table 12 · 4 seats · ' + night, where: 'Table host · Venue 1', check: 'This code is for the table only, not milonga entry. Only the holder has it. Seat the holder at table 12; invited friends (listed above) may join them. Everyone, holder included, enters the milonga with their own milonga ticket.', guests: joined }; }
+      else p = { kind: 'TICKET', color: '#F843AA', short: '', rows: [], allow: n, where: 'Venue entrance', check: '' };
+      passList.push({ id: 'o-' + oi, title: n, ...p, rows: p.isTable ? p.rows : p.rows.concat([['Admits', admitsTxt]]), rule: personalRule, verdict: p.verdict || 'VALID · ENTRY OK' });
+    });
+    const bookedCls = s.registered ? allClasses.filter((c) => (s.myClasses || {})[c.id] === 'booked') : [];
+    bookedCls.forEach((c) => passList.push({ id: 'cls-' + c.id, kind: 'CLASS', color: '#7FE0D0', title: c.topic, short: c.dayLabel + ' · ' + c.time + ' · ' + c.room,
+      rows: [['When', c.dayLabel + ' · ' + c.time], ['Room', c.room], ['Maestros', c.couple], ['Level', c.level], ['Role', coupleP ? 'Leader + follower (couple)' : (s.role === 'leader' ? 'Leader' : (s.role === 'both' ? 'Leader or follower' : 'Follower'))], ['Admits', admitsTxt]],
+      rule: personalRule, verdict: 'CHECK-IN OK', allow: c.topic + ' · ' + c.time, where: c.room + ' · class room door', check: 'Mark on the attendance list. Helps keep leaders and followers balanced in the room.' }));
+    const ownedClassCredits = (s.owned || []).filter((o) => /^Class ticket/.test(o.n)).reduce((a, o) => a + o.qty, 0);
+    const passes = passList.map((pp) => ({ ...pp, open: () => this.setState({ qrPass: pp.id, qrView: 'mine' }) }));
+    const qpRaw = passList.find((pp) => pp.id === s.qrPass) || passList[0] || { kind: '', title: '', rows: [], rule: '', verdict: '', allow: '', where: '', check: '', color: '#F843AA', id: 'x' };
+    const qp = { ...qpRaw, cells: qrFor(qpRaw.id + holder), code: codeFor(qpRaw.id + holder), qrLabel: 'QR code for ' + qpRaw.title,
+      rows: qpRaw.rows.map((r) => ({ k: r[0], v: r[1] })).concat([{ k: 'Holder', v: holder }]),
+      scanVerdict: qpRaw.verdict, scanAllow: qpRaw.allow, staffCheck: qpRaw.check, isTable: !!qpRaw.isTable,
+      scanRows: [{ k: 'Holder', v: holder }, { k: 'Ticket', v: qpRaw.title }, { k: qpRaw.isTable ? 'Includes' : 'Admits', v: qpRaw.isTable ? 'Table only · no milonga entry' : (qpRaw.rows.find((r) => r[0] === 'Admits') || ['', admitsTxt])[1] }, { k: 'Checkpoint', v: qpRaw.where }].concat(qpRaw.isTable ? [{ k: 'Invited friends', v: (s.tableGuests || []).length ? (s.tableGuests || []).map((g) => g.n).join(', ') : 'none joined yet' }] : []).concat([{ k: 'Code', v: codeFor(qpRaw.id + holder) }, { k: 'Status', v: 'First scan · not used before' }]) };
+    const qTab = (on) => 'font: inherit; min-height: 36px; border-radius: 18px; border: 0; cursor: pointer; font-size: 12px; font-weight: 700; ' + (on ? 'background: #F843AA; color: #1A0024;' : 'background: transparent; color: #FFFFFF;');
     const isTickets = s.screen === 'tickets';
     const showPayBar = isTickets && s.step !== 'done' && cartCount > 0;
-    const payAction = s.step === 'cart' ? set({ step: 'pay' }) : () => this.setState({ step: 'done', doneLines: cartLines, owned: s.owned.concat(cartLines), cart: {} });
+    const payAction = s.step === 'cart' ? set({ step: 'pay' }) : () => this.setState({ step: 'done', justPaid: true, doneLines: cartLines, owned: s.owned.concat(cartLines), cart: {} });
 
     // LISBON
     const lisbonTabs = [{ id: 'explore', n: 'Eat & explore' }, { id: 'housing', n: 'Shared housing' }].map((t) => ({
@@ -1345,40 +1943,151 @@ class Component extends DCLogic {
     const hFilters = [{ id: 'offer', n: 'Rooms offered' }, { id: 'look', n: 'Looking for a room' }].map((f) => ({ ...f, on: s.hFilter === f.id, style: pill(s.hFilter === f.id), pick: set({ hFilter: f.id }) }));
     const listingData = {
       offer: [
-        { id: 'h1', t: 'Room in a shared flat', a: 'Graça', w: '4 min walk to Venue 1', b: '1 double bed', dt: '25 – 31 May', p: '€45 / night', h: 'Rita · Portugal · Follower' },
-        { id: 'h2', t: '2 beds in a tango flatshare', a: 'São Vicente', w: '2 min walk', b: '2 single beds', dt: '26 – 31 May', p: '€35 / bed', h: 'Klaus · Germany · Leader' },
-        { id: 'h3', t: 'Sofa bed near the river', a: 'Alfama', w: '12 min walk', b: 'Sofa bed', dt: '24 – 30 May', p: '€25 / night', h: 'Inês · Portugal · Both' }],
+        { id: 'h1', t: 'Room in a shared flat', a: 'Graça', w: '4 min walk to Venue 1', b: 'Private room', dt: '25 – 31 May', p: '€45 / night', h: 'Rita · Portugal · Follower' },
+        { id: 'h2', t: 'Room in a tango flatshare', a: 'São Vicente', w: '2 min walk', b: 'Shared room with double bed', dt: '26 – 31 May', p: '€35 / night', h: 'Klaus · Germany · Leader' },
+        { id: 'h3', t: 'Sofa near the river', a: 'Alfama', w: '12 min walk', b: 'Sofa in the living room', dt: '24 – 30 May', p: '€25 / night', h: 'Inês · Portugal · Both' }],
       look: [
         { id: 'h4', t: 'Looking for a room to share', a: 'Graça or Alfama', w: 'Walking distance', b: '1 person', dt: '26 – 31 May', p: 'Up to €40', h: 'Yuki · Japan · Follower' },
         { id: 'h5', t: 'Two friends seeking a flat', a: 'Near the venues', w: 'Walking distance', b: '2 people', dt: '25 – 31 May', p: 'Up to €70', h: 'Marco & Ana · Brazil' }]
     };
-    const listings = listingData[s.hFilter].map((l) => {
+    const listings = (s.myListings || []).filter((l) => l.kind === 'offer' && l.status !== 'agreed').concat(listingData.offer).map((l) => {
       const sent = !!s.hSent[l.id];
-      return { ...l, btn: sent ? 'Message sent' : 'Message',
+      return { ...l, btn: sent ? 'Open chat' : 'Message',
         btnStyle: 'font: inherit; min-height: 40px; padding: 0 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; flex-shrink: 0; ' + (sent ? 'background: transparent; color: #FFFFFF; border: 1px solid #5A2A75;' : 'background: ' + accent + '; color: #1A0024; border: 0;'),
-        msg: () => this.setState({ hSent: { ...s.hSent, [l.id]: !sent } }) };
-    });
+        msg: gate('housing', () => this.setState({ hSent: { ...s.hSent, [l.id]: true }, dm: { ...(this.state.dm || {}), ['hl-' + l.id]: { type: 'hl', lid: l.id } }, screen: 'chat', chatId: 'hl-' + l.id, draft: '', linkMode: false, read: { ...s.read, ['hl-' + l.id]: true } })) };
+    }).map((l) => ({ ...l, mine: !!l.mine, hasPhoto: !!l.photo,
+      hasReq: !!(l.mine && l.req), reqN: l.req ? l.req.n : '', reqI: l.req ? l.req.i : '',
+      chatReq: () => this.setState({ screen: 'chat', chatId: 'h-' + l.id, draft: '', linkMode: false, read: { ...s.read, ['h-' + l.id]: true } }),
+      accept: () => this.setState({ myListings: (this.state.myListings || []).map((x) => x.id === l.id ? { ...x, status: 'agreed', with: x.req.n.split(' · ')[0] } : x), screen: 'chat', chatId: 'h-' + l.id, draft: '', linkMode: false }),
+      card: 'background: #23002F; border-radius: 18px; padding: 16px; display: flex; flex-direction: column; gap: 8px; border: 1px solid ' + (l.mine ? '#7FE0D0' : 'transparent') + ';',
+      ...(l.mine ? { btn: 'Remove', msg: () => this.setState({ myListings: (this.state.myListings || []).filter((x) => x.id !== l.id) }),
+        btnStyle: 'font: inherit; min-height: 40px; padding: 0 14px; border-radius: 20px; font-size: 13px; font-weight: 700; cursor: pointer; flex-shrink: 0; background: transparent; color: #FFFFFF; border: 1px solid #5A2A75;' } : {}) }));
 
     // MY PROFILE + MESSAGES
     const convoDefs = [
-      { id: 'c1', n: 'Jonas', i: 'J', tag: 'Class partner', msgs: [{ me: false, t: 'Hi! I saw you are looking for a partner. Shall we take the Thursday 14:00 class together?' }] },
-      { id: 'c2', n: 'Klaus', i: 'K', tag: 'Shared housing', msgs: [{ me: true, t: 'Hello! Is the bed in São Vicente still free?' }, { me: false, t: 'Yes, from 26 to 31 May. Happy to share with a tanguero!' }] },
-      { id: 'c3', n: 'Lisbon Tango Festival', i: 'L', tag: 'Organizer', msgs: [{ me: false, t: 'Welcome to the festival! Announcements and program updates will appear here.' }] }
+      { id: 'c1', kind: 'partner', n: 'Jonas', i: 'J', tag: 'Class partner · Leader · Germany', when: '10:12',
+        ctx: { kind: 'CLASS PARTNER REQUEST', title: 'Milonga con traspié', sub: 'Thu 27 May · 14:00 – 15:15 · Venue 1 · Vanesa Villalba & Facundo Piñero', classId: 'thu-0' },
+        msgs: [{ sep: 'TODAY' }, { me: false, t: 'Hi! I saw you are looking for a partner. Shall we take the Thursday 14:00 class together?', time: '10:12' }] },
+      { id: 'c2', kind: 'housing', n: 'Klaus', i: 'K', tag: 'Shared housing · Host', when: 'Yesterday', isPrivate: true,
+        ctx: { kind: 'SHARED HOUSING', title: 'Room in a tango flatshare', sub: 'São Vicente · 2 min walk to Venue 1 · 26 – 31 May · €35 / night', status: 'AGREED · PRIVATE' },
+        msgs: [{ sep: 'YESTERDAY' }, { me: true, t: 'Hello Klaus! Is the room in São Vicente still free from 26 to 31 May?', time: '18:40' },
+          { me: false, t: 'Yes it is! Happy to share with a tanguero.', time: '19:02' },
+          { system: 'Klaus accepted your request. The post is now private between you two.' },
+          { me: false, t: 'Here is the address: Rua de São Vicente 12, 3º. Ring twice, the bell is a bit shy.', time: '19:03' },
+          { me: false, link: 'https://www.airbnb.com/rooms/48213977', time: '19:03' }] },
+      { id: 'c3', kind: 'org', n: 'Lisbon Tango Festival', i: 'L', tag: 'Festival team', when: 'Mon',
+        msgs: [{ sep: 'MONDAY' }, { me: false, t: 'Welcome to the festival! Ask us anything about tickets, classes or your stay. Announcements also appear on the Home screen.', time: '09:00' }] }
     ];
-    const convos = convoDefs.map((c) => {
+    const hConvos = (s.myListings || []).filter((l) => l.status === 'agreed' || (l.status === 'public' && l.req)).map((l) => {
+      const guest = l.with || (l.req ? l.req.n.split(' · ')[0] : 'Guest');
+      const agreedNow = l.status === 'agreed';
+      const seed = [{ me: false, t: 'Hi! Is your ' + l.b.split(' · ')[0].toLowerCase() + ' still free for ' + l.dt + '? I dance late and I am very quiet in the mornings.', time: '11:20' }];
+      if (agreedNow) {
+        seed.push({ system: 'You accepted ' + guest + '. The post is now private between you two.' });
+        seed.push({ me: true, t: 'Welcome! Here is the address: ' + (l.address || ''), time: 'Now' });
+        if (l.link) seed.push({ me: true, link: l.link, time: 'Now' });
+      }
+      return { id: 'h-' + l.id, kind: 'housing', n: guest, i: guest.charAt(0), tag: 'Shared housing · ' + (agreedNow ? 'Your guest' : 'Wants to stay'), when: agreedNow ? 'Now' : '11:20', isPrivate: agreedNow,
+        ctx: { kind: 'SHARED HOUSING', title: l.t, sub: l.a + ' · ' + l.w + ' · ' + l.dt + ' · ' + l.p, status: agreedNow ? 'AGREED · PRIVATE' : 'WAITING FOR YOU', hostPending: !agreedNow, listingId: l.id, guest: guest },
+        msgs: [{ sep: 'TODAY' }].concat(seed) };
+    });
+    const dmConvos = Object.keys(s.dm || {}).map((id) => {
+      const d = s.dm[id];
+      if (d.type === 'hl') {
+        const l = listingData.offer.find((x) => x.id === d.lid); if (!l) return null;
+        const host = l.h.split(' · ')[0];
+        return { id: id, kind: 'housing', n: host, i: host.charAt(0), tag: 'Shared housing · Host', when: 'Now',
+          ctx: { kind: 'SHARED HOUSING', title: l.t, sub: l.a + ' · ' + l.w + ' · ' + l.dt + ' · ' + l.p, status: 'REQUEST SENT', guestPending: true, host: host },
+          msgs: [{ sep: 'TODAY' }, { system: 'You asked ' + host + ' about this place. Chat as much as you like: the exact address is shared only if ' + host + ' accepts.' }] };
+      }
+      if (d.type === 'pc') {
+        const c = allClasses.find((x) => x.id === d.cid); const pp = peopleRaw.find((x) => x.id === d.pid); if (!c || !pp) return null;
+        return { id: id, kind: 'partner', n: pp.n, i: pp.n.charAt(0), tag: 'Class partner · ' + roleName[pp.r] + ' · ' + pp.c, when: 'Now',
+          ctx: { kind: 'CLASS PARTNER', title: c.topic, sub: c.dayLabel + ' · ' + c.time + ' · ' + c.room + ' · ' + c.couple, classId: c.id, sentKey: c.id + '-' + pp.id, person: pp.n },
+          msgs: [{ sep: 'TODAY' }, { system: 'Get to know each other first if you like. Send the partner request whenever you are ready.' }] };
+      }
+      return null;
+    }).filter((x) => x);
+    const convos = convoDefs.concat(hConvos, dmConvos).map((c) => {
       const msgs = c.msgs.concat(s.extra[c.id] || []);
-      const lastM = msgs[msgs.length - 1];
-      return { ...c, msgs, last: (lastM.me ? 'You: ' : '') + lastM.t, unread: !s.read[c.id] && !lastM.me,
-        open: () => this.setState({ screen: 'chat', chatId: c.id, draft: '', read: { ...s.read, [c.id]: true } }) };
+      const real = msgs.filter((m) => !m.sep && !m.system);
+      const lastM = real[real.length - 1] || { me: false, t: '' };
+      return { ...c, msgs, last: (lastM.me ? 'You: ' : '') + (lastM.link ? 'Booking link' : lastM.t), unread: !s.read[c.id] && !lastM.me,
+        open: () => this.setState({ screen: 'chat', chatId: c.id, draft: '', linkMode: false, read: { ...s.read, [c.id]: true } }) };
     });
     const unreadCount = convos.filter((c) => c.unread).length;
     const chatRaw = convos.find((c) => c.id === s.chatId) || convos[0];
-    const chat = { ...chatRaw, msgs: chatRaw.msgs.map((m) => ({ t: m.t, s: 'max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; ' + (m.me ? 'align-self: flex-end; background: ' + accent + '; color: #1A0024; border-bottom-right-radius: 6px;' : 'align-self: flex-start; background: #23002F; color: #FFFFFF; border-bottom-left-radius: 6px;') })) };
+    const bubble = (me) => 'max-width: 78%; padding: 10px 14px; border-radius: 18px; font-size: 14px; line-height: 1.45; ' + (me ? 'align-self: flex-end; background: ' + accent + '; color: #1A0024; border-bottom-right-radius: 6px;' : 'align-self: flex-start; background: #23002F; color: #FFFFFF; border-bottom-left-radius: 6px;');
+    const hostOf = (u) => { const m = /^https?:\/\/([^\/?#]+)/i.exec(u || ''); return m ? m[1].replace(/^www\./, '') : u; };
+    const kindColor = { partner: '#7FE0D0', housing: '#FFB36B', org: '#F843AA' };
+    const kindShort = { partner: 'PARTNER', housing: 'HOUSING', org: 'FESTIVAL' };
+    const avatarFor = (c, size) => 'width: ' + size + 'px; height: ' + size + 'px; flex-shrink: 0; border-radius: ' + (size / 2) + 'px; display: flex; align-items: center; justify-content: center; font-weight: 800; font-size: ' + Math.round(size * 0.4) + 'px; ' + (c.kind === 'org' ? 'background: #F843AA; color: #1A0024;' : 'background: #3D005C; color: #FFFFFF; border: 2px solid ' + (kindColor[c.kind] || '#5A2A75') + ';');
+    const ctx = chatRaw.ctx || null;
+    const pStatus = ctx && ctx.classId && !ctx.sentKey ? (s.incoming[ctx.classId] || 'pending') : null;
+    const reqSent = ctx && ctx.sentKey ? !!s.sent[ctx.sentKey] : false;
+    const ctxStatusText = !ctx ? '' : (pStatus ? (pStatus === 'accepted' ? 'MATCHED' : (pStatus === 'declined' ? 'DECLINED' : 'WAITING FOR YOU')) : (ctx.sentKey ? (reqSent ? 'REQUEST SENT' : 'NOT REQUESTED YET') : (ctx.status || '')));
+    const chat = { ...chatRaw, isPrivate: !!chatRaw.isPrivate, isOrg: chatRaw.kind === 'org', canLink: chatRaw.kind === 'housing',
+      avatarStyle: avatarFor(chatRaw, 44),
+      tagStyle: 'font-size: 12px; font-weight: 600; color: ' + (kindColor[chatRaw.kind] || '#D4C2E0') + ';',
+      hasCtx: !!ctx, ctxKind: ctx ? ctx.kind : '', ctxTitle: ctx ? ctx.title : '', ctxSub: ctx ? ctx.sub : '',
+      ctxStatus: ctxStatusText,
+      ctxStatusStyle: 'font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 3px 8px; border-radius: 8px; color: #1A0024; background: ' + (/WAITING|REQUEST|NOT/.test(ctxStatusText) ? '#FFD27A' : (/DECLINED/.test(ctxStatusText) ? '#A88BBB' : '#7FE0D0')) + ';',
+      showPartnerActions: pStatus === 'pending' && !isCouple,
+      showHostActions: !!(ctx && ctx.hostPending), showSendRequest: !!(ctx && ctx.sentKey && !reqSent) && !isCouple,
+      showPendingNote: !!(ctx && (ctx.guestPending || (ctx.sentKey && reqSent))),
+      pendingNote: ctx && ctx.guestPending ? 'Waiting for ' + ctx.host + ' to accept. The address will appear here when they do.' : (ctx && ctx.person ? 'Waiting for ' + ctx.person + ' to accept your partner request.' : ''),
+      ctxGo: ctx && ctx.classId ? set({ screen: 'classes', cDay: ctx.classId.split('-')[0], openClass: ctx.classId }) : set({ screen: 'lisbon', lisbonTab: 'housing' }),
+      ctxGoLabel: ctx && ctx.classId ? 'Open the class ›' : 'Open Shared housing ›',
+      hasQuick: chatRaw.kind === 'org',
+      quick: ['When do tickets go on sale?', 'Can I change my class?', 'Refunds'].map((q) => ({ n: q, send: () => {
+        const id = chatRaw.id; const cur = this.state.extra || {};
+        this.setState({ extra: { ...cur, [id]: (cur[id] || []).concat([{ me: true, t: q, time: 'Now' }, { me: false, t: 'Automatic reply: thanks for your message! Someone from the festival team will answer you here.', time: 'Now' }]) } });
+      } })),
+      msgs: chatRaw.msgs.map((m) => ({ t: m.sep || m.system || m.t || '', isSep: !!m.sep, isSystem: !!m.system, isText: !m.link && !m.sep && !m.system, isLink: !!m.link,
+        s: bubble(m.me) + ' display: flex; flex-direction: column; gap: 2px;',
+        timeLabel: m.time ? m.time + (m.me ? ' · Seen' : '') : '', timeStyle: 'align-self: flex-end; font-size: 10px; opacity: 0.7;',
+        url: m.link || '', host: hostOf(m.link), who: m.me ? 'Shared by you' : 'Shared by ' + chatRaw.n,
+        linkStyle: 'max-width: 82%; display: flex; gap: 12px; align-items: center; text-decoration: none; color: #FFFFFF; padding: 10px 12px; border-radius: 16px; border: 1px solid #F843AA; background: #23002F; ' + (m.me ? 'align-self: flex-end;' : 'align-self: flex-start;') })) };
+    const inboxF = s.inboxF || 'all';
+    const fDefs = [{ id: 'all', n: 'All' }, { id: 'partner', n: 'Class partners' }, { id: 'housing', n: 'Housing' }, { id: 'org', n: 'Festival' }];
+    const inboxVals = {
+      isInbox: s.screen === 'inbox',
+      goInbox: set({ screen: 'inbox' }),
+      goHousingMsgs: set({ screen: 'inbox', inboxF: 'housing' }),
+      goPartnerMsgs: set({ screen: 'inbox', inboxF: 'partner', inboxBack: 'classes' }),
+      partnerUnread: String(convos.filter((c) => c.kind === 'partner' && c.unread).length || ''),
+      partnerMsgBadge: convos.some((c) => c.kind === 'partner' && c.unread) ? 'min-width: 18px; height: 18px; border-radius: 9px; background: #F843AA; color: #1A0024; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center' : 'display: none',
+      housingUnread: String(convos.filter((c) => c.kind === 'housing' && c.unread).length || ''),
+      housingMsgBadge: convos.some((c) => c.kind === 'housing' && c.unread) ? 'min-width: 18px; height: 18px; border-radius: 9px; background: #F843AA; color: #1A0024; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center' : 'display: none',
+      inboxFilters: fDefs.map((f) => { const on = inboxF === f.id; const cnt = convos.filter((c) => (f.id === 'all' || c.kind === f.id) && c.unread).length;
+        return { ...f, on: on, pick: set({ inboxF: f.id }), count: cnt ? String(cnt) : '', countStyle: cnt ? 'margin-left: 6px; min-width: 18px; height: 18px; border-radius: 9px; font-size: 11px; font-weight: 800; display: inline-flex; align-items: center; justify-content: center; ' + (on ? 'background: #1A0024; color: #F843AA;' : 'background: #F843AA; color: #1A0024;') : 'display: none;',
+          style: pill(on) + ' display: flex; align-items: center;' }; }),
+      inboxList: convos.filter((c) => inboxF === 'all' || c.kind === inboxF).map((c) => ({ ...c, avatarStyle: avatarFor(c, 46), tagShort: kindShort[c.kind] || '',
+        tagStyle: 'flex-shrink: 0; font-size: 9px; font-weight: 800; letter-spacing: 1px; padding: 2px 6px; border-radius: 6px; color: #1A0024; background: ' + (kindColor[c.kind] || '#A88BBB') + ';',
+        nameStyle: 'font-size: 15px; font-weight: ' + (c.unread ? '800' : '600') + ';',
+        lastStyle: 'font-size: 12px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; color: ' + (c.unread ? '#FFFFFF' : '#D4C2E0') + '; font-weight: ' + (c.unread ? '600' : '400') + ';' })),
+      inboxEmpty: !convos.some((c) => inboxF === 'all' || c.kind === inboxF),
+      chatMenu: !!s.chatMenu, toggleChatMenu: () => this.setState({ chatMenu: !this.state.chatMenu }),
+      chatMuteLabel: (s.muted || {})[chatRaw.id] ? 'Unmute notifications' : 'Mute notifications',
+      chatMute: () => this.setState({ chatMenu: false, muted: { ...(this.state.muted || {}), [chatRaw.id]: !((this.state.muted || {})[chatRaw.id]) } }),
+      chatReport: () => this.setState({ chatMenu: false, reported: { ...(this.state.reported || {}), [chatRaw.id]: true } }),
+      chatReported: !!(s.reported || {})[chatRaw.id],
+      hostAccept: () => ctx && this.setState({ myListings: (this.state.myListings || []).map((x) => x.id === ctx.listingId ? { ...x, status: 'agreed', with: ctx.guest } : x) }),
+      hostDecline: () => ctx && this.setState({ myListings: (this.state.myListings || []).map((x) => x.id === ctx.listingId ? { ...x, req: null } : x), screen: 'lisbon', lisbonTab: 'housing' }),
+      sendPartnerReq: gate('classes', () => ctx && this.setState({ sent: { ...this.state.sent, [ctx.sentKey]: true }, extra: { ...(this.state.extra || {}), [chatRaw.id]: ((this.state.extra || {})[chatRaw.id] || []).concat([{ system: 'Partner request sent to ' + ctx.person + ' for this class.' }]) } })),
+      chatAccept: gate('classes', () => ctx && this.setState({ incoming: { ...this.state.incoming, [ctx.classId]: 'accepted' }, extra: { ...(this.state.extra || {}), [chatRaw.id]: ((this.state.extra || {})[chatRaw.id] || []).concat([{ system: 'You are now dance partners for this class. See you on the floor!' }]) } })),
+      chatDecline: () => ctx && this.setState({ incoming: { ...this.state.incoming, [ctx.classId]: 'declined' }, extra: { ...(this.state.extra || {}), [chatRaw.id]: ((this.state.extra || {})[chatRaw.id] || []).concat([{ system: 'You declined. Jonas can look for another partner.' }]) } })
+    };
     const sendMsg = () => {
       const t = (s.draft || '').trim();
       if (!t) return;
       const id = chatRaw.id;
-      this.setState({ draft: '', extra: { ...s.extra, [id]: (s.extra[id] || []).concat([{ me: true, t: t }]) } });
+      if (s.linkMode) {
+        if (!/^https?:\/\/\S+\.\S+/i.test(t)) { this.setState({ linkError: true }); return; }
+        this.setState({ draft: '', linkMode: false, linkError: false, extra: { ...s.extra, [id]: (s.extra[id] || []).concat([{ me: true, link: t, time: 'Now' }]) } });
+        return;
+      }
+      this.setState({ draft: '', extra: { ...s.extra, [id]: (s.extra[id] || []).concat([{ me: true, t: t, time: 'Now' }]) } });
     };
     const sentReq = Object.keys(s.sent).filter((k) => s.sent[k]).length;
     const matches = Object.keys(s.incoming).filter((k) => s.incoming[k] === 'accepted').length;
@@ -1390,22 +2099,25 @@ class Component extends DCLogic {
     ];
     const meActions = [
       { n: 'Find a partner', icon: icons.classes, go: set({ screen: 'classes', openClass: 'thu-0' }) },
-      { n: 'Post shared housing', icon: icons.bed, go: set({ screen: 'lisbon', lisbonTab: 'housing', newListing: true }) },
+      { n: 'Offer a room', icon: icons.bed, go: set({ screen: 'post', postDone: null }) },
       { n: 'My agenda', icon: icons.program, go: set({ screen: 'program' }) },
       { n: 'Buy tickets', icon: icons.tickets, go: goTickets }
     ];
 
-    const titles = { register: 'Registration', home: 'Festival 2027', me: 'My profile', chat: 'Messages', venues: 'Venues', program: 'Program', classes: s.openClass ? 'Class' : 'Classes', tickets: s.step === 'pay' ? 'Checkout' : (s.step === 'done' ? 'Your tickets' : 'Tickets'), lisbon: 'Lisbon', profile: isDjProf ? 'DJ' : 'Maestros', countries: 'Our dancers' };
+    const titles = { post: 'Shared housing', register: 'Registration', home: 'Festival 2027', me: 'My profile', chat: 'Messages', inbox: 'Messages', venues: 'Venues', program: 'Program', classes: s.openClass ? 'Class' : 'Classes', tickets: s.step === 'pay' ? 'Checkout' : (s.step === 'done' ? 'Your tickets' : 'Tickets'), lisbon: 'Lisbon', profile: isDjProf ? 'DJ' : 'Maestros', countries: 'Our dancers' };
     Object.assign(titles, { home: T.tFestival, program: T.tProgram, classes: s.openClass ? T.tClass : T.tClasses, tickets: s.step === 'pay' ? T.tCheckout : (s.step === 'done' ? T.tYourTickets : T.tTickets), lisbon: T.tLisbon, me: T.tMe, chat: T.tMsgs, venues: T.tVenues, countries: T.tDancers, profile: isDjProf ? 'DJ' : T.tMaestros });
-    const showBack = (s.screen === 'classes' && !!s.openClass) || (isTickets && s.step === 'pay') || s.screen === 'profile' || s.screen === 'countries' || s.screen === 'me' || s.screen === 'chat' || s.screen === 'register' || s.screen === 'venues';
-    const back = s.screen === 'register' ? set({ screen: s.registered ? 'me' : (s.prevMe || 'home') }) : s.screen === 'venues' ? set({ screen: 'home' }) : s.screen === 'chat' ? set({ screen: 'me' }) : s.screen === 'me' ? set({ screen: s.prevMe || 'home' }) : s.screen === 'countries' ? set({ screen: 'home' }) : s.screen === 'profile' ? set({ screen: s.prevScreen || 'home' }) : (s.screen === 'classes' ? set({ openClass: null }) : set({ step: 'cart' }));
+    const agreed = (s.myListings || []).filter((l) => l.status === 'agreed').map((l) => ({ ...l, with: (l.with || '').toUpperCase(), address: l.address || 'Address shared in your private chat',
+      note: 'Private post · removed from the public list. Only you and ' + l.with + ' can see this address.', withName: l.with,
+      openChat: () => this.setState({ screen: 'chat', chatId: 'h-' + l.id, draft: '', linkMode: false, read: { ...s.read, ['h-' + l.id]: true } }) }));
+    const showBack = (s.screen === 'classes' && !!s.openClass) || (isTickets && s.step === 'pay') || s.screen === 'profile' || s.screen === 'countries' || s.screen === 'me' || s.screen === 'chat' || s.screen === 'register' || s.screen === 'venues' || s.screen === 'post' || s.screen === 'inbox';
+    const back = (s.screen === 'chat' && /^(h-|hl-)/.test(String(s.chatId || ''))) ? set({ screen: 'lisbon', lisbonTab: 'housing' }) : s.screen === 'post' ? set({ screen: 'lisbon', lisbonTab: 'housing', postDone: null }) : s.screen === 'register' ? set({ screen: s.registered ? 'me' : (s.prevMe || 'home') }) : s.screen === 'venues' ? set({ screen: 'home' }) : s.screen === 'chat' ? set({ screen: 'inbox', chatMenu: false }) : s.screen === 'inbox' ? set(s.inboxF === 'housing' ? { screen: 'lisbon', lisbonTab: 'housing', inboxF: 'all' } : (s.inboxBack === 'classes' ? { screen: 'classes', inboxF: 'all', inboxBack: null } : { screen: 'me' })) : s.screen === 'me' ? set({ screen: s.prevMe || 'home' }) : s.screen === 'countries' ? set({ screen: 'home' }) : s.screen === 'profile' ? set({ screen: s.prevScreen || 'home' }) : (s.screen === 'classes' ? set({ openClass: null }) : set({ step: 'cart' }));
 
     return {
       accent, title: titles[s.screen], showBack, back,
       cartCount, hasCart: cartCount > 0, cartLabel: 'Tickets, ' + cartCount + ' in cart',
       goTickets, goProgram, goClasses, tabs, tiles, couples, djs,
       isHome: s.screen === 'home', isProgram: s.screen === 'program', isProfile: s.screen === 'profile', prof,
-      isMe: s.screen === 'me', isChat: s.screen === 'chat', cdTitle: 'Opening night · Wednesday 26 May 2027 · 21:00',
+      ...inboxVals, isMe: s.screen === 'me', isChat: s.screen === 'chat', cdTitle: 'Opening night · Wednesday 26 May 2027 · 21:00',
       cdDays: String(Math.max(0, Math.ceil((new Date('2027-05-26T21:00:00+01:00').getTime() - (s.now || Date.now())) / 86400000))),
       cdText: (new Date('2027-05-26T21:00:00+01:00').getTime() - (s.now || Date.now())) <= 0 ? T.isOn : (Math.ceil((new Date('2027-05-26T21:00:00+01:00').getTime() - (s.now || Date.now())) / 86400000) === 1 ? T.dayTo : T.daysTo),
       cd: (() => {
@@ -1424,7 +2136,47 @@ class Component extends DCLogic {
       dayPrev: () => dayDrag.to(Math.max(0, dayIdx - 1)), dayNext: () => dayDrag.to(Math.min(4, dayIdx + 1)),
       dayDots: days.map((d, i) => ({ label: d.full, go: () => dayDrag.to(i), s: 'display: block; height: 8px; border-radius: 4px; transition: width 0.2s; ' + (i === dayIdx ? 'width: 22px; background: ' + accent + ';' : 'width: 8px; background: #5A2A75;') })),
       mRef: mDrag.ref, mDown: mDrag.down, mMove: mDrag.move, mUp: mDrag.up, djRef: djDrag.ref, djDown: djDrag.down, djMove: djDrag.move, djUp: djDrag.up,
-      isRegister: s.screen === 'register', reg, regInitial, avatars, regRoles, regLevels,
+      ...postVals, agreed, hasAgreed: agreed.length > 0, isRegister: s.screen === 'register',
+      regNotCouple: reg.accountType !== 'couple',
+      switchOpen: !!s.acctSwitch, switchStep1: !!s.acctSwitch && s.acctSwitch.step === 1, switchStep2: !!s.acctSwitch && s.acctSwitch.step === 2,
+      switchStepLabel: s.acctSwitch ? 'STEP ' + s.acctSwitch.step + ' OF 2 \u00b7 ACCOUNT CHANGE' : '',
+      switchTitle: s.acctSwitch && s.acctSwitch.to === 'couple' ? 'Switch to a couple account?' : 'Switch to a single dancer account?',
+      switchChanges: s.acctSwitch && s.acctSwitch.to === 'couple' ? [
+        'New tickets are priced for two people (couple price), for the two of you only, and are not transferable to other people.',
+        'You will be registered as one leader + one follower attending together. The single leader / follower choice is removed.',
+        'Partner finder becomes view-only: open partner requests are cancelled and you cannot send or accept new ones.',
+        'Tickets you already bought stay valid as they are. Shared housing stays the same.'
+      ] : [
+        'New tickets are priced for one person, for yourself only, and are not interchangeable with other people.',
+        'You choose your own role again: leader, follower or both. Your partner is removed from the account.',
+        'Partner finder opens again: you can send and accept partner requests.',
+        'Couple tickets you already bought stay valid for both of you. Shared housing stays the same.'
+      ],
+      switchNext: () => this.setState({ acctSwitch: { ...this.state.acctSwitch, step: 2 } }),
+      switchFinalText: s.acctSwitch && s.acctSwitch.to === 'couple' ? "Please confirm once more. After switching, add your partner's name and save your profile." : 'Please confirm once more. After switching, choose your role and save your profile.',
+      switchConfirmLabel: s.acctSwitch && s.acctSwitch.to === 'couple' ? 'YES, SWITCH TO COUPLE' : 'YES, SWITCH TO SINGLE',
+      switchConfirm: () => { const to = this.state.acctSwitch.to; const r = this.state.reg || this._reg0;
+        this.setState({ acctSwitch: null, sent: to === 'couple' ? {} : this.state.sent,
+          reg: to === 'couple' ? { ...r, accountType: 'couple', leader: true, follower: true } : { ...r, accountType: 'single', partnerName: '', leader: false, follower: false } }); },
+      cancelSwitch: set({ acctSwitch: null }),
+      isCouple: isCouple, notCouple: !isCouple, showIncoming: hasIncoming && !isCouple,
+      coupleNote: 'You are registered as a couple' + ((reg.partnerName || '').trim() ? ' with ' + reg.partnerName.trim() : '') + ', so partner requests are off. You can still see who is looking for a partner.',
+      accountLabel: !s.registered ? 'Not registered' : (isCouple ? 'Couple' : 'Single dancer'),
+      askPassword: !s.registered,
+      regIsCouple: reg.accountType === 'couple', regNameLabel: reg.accountType === 'couple' ? 'YOUR NAME' : 'NAME',
+      accTypes: [{ id: 'single', n: 'Single dancer' }, { id: 'couple', n: 'Couple' }].map((a) => ({ ...a, on: reg.accountType === a.id, pick: () => { if (reg.accountType === a.id) return; if (s.registered) this.setState({ acctSwitch: { to: a.id, step: 1 } }); else setReg('accountType', a.id); },
+        style: 'font: inherit; min-height: 44px; border-radius: 20px; border: 0; cursor: pointer; font-size: 14px; font-weight: 700; ' + (reg.accountType === a.id ? 'background: ' + accent + '; color: #1A0024;' : 'background: transparent; color: #FFFFFF;') })),
+      onPartnerName: (e) => setReg('partnerName', e.target.value), onPassword: (e) => setReg('password', e.target.value),
+      togglePasskey: () => setReg('passkey', !(this.state.reg || this._reg0).passkey),
+      passkeyStyle: 'font: inherit; min-height: 64px; padding: 10px 14px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; gap: 12px; ' + (reg.passkey ? 'background: #3D005C; color: #FFFFFF; border: 1px solid #F843AA;' : 'background: #23002F; color: #FFFFFF; border: 1px solid #5A2A75;'),
+      passkeyBox: 'width: 24px; height: 24px; flex-shrink: 0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; box-sizing: border-box; ' + (reg.passkey ? 'background: #F843AA; color: #1A0024;' : 'border: 2px solid #A88BBB;'),
+      passkeyMark: reg.passkey ? '\u2713' : '',
+      guestCheckout: !s.registered, guestEmail: s.guestEmail || '', onGuestEmail: (e) => this.setState({ guestEmail: e.target.value }),
+      gateOpen: !!s.gate, closeGate: set({ gate: null }),
+      gateTitle: s.gate === 'housing' ? 'Shared housing is for registered dancers' : 'Classes are for registered dancers',
+      gateText: s.gate === 'housing' ? 'Hosts and guests need to know who they share a home with. Create your dancer profile once (single or couple), then sign in securely with Face ID or your fingerprint.' : 'To book classes and find a dance partner, create your dancer profile once (single or couple). Next time you sign in securely with Face ID or your fingerprint.',
+      gateRegister: set({ gate: null, screen: 'register' }),
+      gateSignIn: () => { const r = this.state.reg || this._reg0; this.setState({ gate: null, registered: true, reg: { ...r, name: r.name || 'Ana Silva', email: r.email || 'ana@example.com', country: r.country || 'Portugal', follower: r.follower || !r.leader, level: r.level || 'weekend' } }); }, reg, regInitial, avatars, regRoles, regLevels,
       countryOptions: countriesRaw.map((c) => c[0]).sort().concat(['Other']).map((v) => ({ v: v })),
       hasPhoto: !!reg.photo, noPhoto: !reg.photo, regPhoto: reg.photo || '',
       regAvatarBig: 'width: 76px; height: 76px; flex-shrink: 0; border-radius: 38px; display: flex; align-items: center; justify-content: center; font-size: 30px; font-weight: 800; color: #1A0024; background: ' + avBg + ';',
@@ -1438,14 +2190,15 @@ class Component extends DCLogic {
       regSubmit: (e) => { if (e && e.preventDefault) e.preventDefault(); if (!regValid) return; this.setState({ registered: true, role: reg.leader && reg.follower ? 'both' : (reg.leader ? 'leader' : 'follower'), screen: 'me' }); },
       goRegister: set({ screen: 'register' }),
       meName: reg.name.trim() || '[Your name]',
-      meSub: s.registered ? regRoleText + ' · ' + regLevelText : 'Tap Register to complete your profile',
+      meSub: s.registered ? (isCouple ? 'Couple · with ' + (reg.partnerName || '').trim() + ' · ' + regLevelText : regRoleText + ' · ' + regLevelText) : 'Tap Register to complete your profile',
       mePlace: [reg.city.trim(), reg.country].filter((x) => x).join(', '),
       msgOrganizer: () => this.setState({ screen: 'chat', chatId: 'c3', draft: '', read: { ...s.read, c3: true } }),
       anns, annCountLabel: anns.length + ' ' + T.annNew, hasAlert: !!alertItem, alert: alertItem || { label: '', title: '', text: '' },
       dismissAlert: () => { if (alertItem) this.setState({ annDismissed: { ...(s.annDismissed || {}), [alertItem.id]: true } }); },
       couplesLoop: couples.concat(couples), djsLoop: djs.concat(djs), mPause: mDrag.pause, djPause: djDrag.pause,
+      hasOwned: (s.owned || []).length > 0, ownedSummary: (() => { const n = (s.owned || []).reduce((a, o) => a + o.qty, 0); return 'You have ' + n + (n === 1 ? ' ticket' : ' tickets'); })(),
       homeStats, countryCount, dancerCount, homeDays, homeSched, hasSched: homeSched.length > 0, noSched: homeSched.length === 0, schedDays, schedTitle,
-      bookClass, followClass, bookStyle, followStyle, clsBooked: clsStatus === 'booked', clsFollowing: clsStatus === 'following',
+      bookClass: gate('classes', bookClass), followClass, bookStyle, followStyle, clsBooked: clsStatus === 'booked', clsFollowing: clsStatus === 'following',
       bookLabel: clsStatus === 'booked' ? 'BOOKED ✓' : 'BOOK CLASS · €25', followLabel: clsStatus === 'following' ? 'Following' : 'Follow',
       isVenues: s.screen === 'venues', goVenues: set({ screen: 'venues' }),
       goMe: () => this.setState({ screen: 'me', prevMe: (s.screen === 'me' || s.screen === 'chat') ? (s.prevMe || 'home') : s.screen }),
@@ -1454,8 +2207,11 @@ class Component extends DCLogic {
       meRole: roleName[s.role], editLabel: s.registered ? 'Edit' : 'Register',
       toggleEditProfile: set({ editProfile: !s.editProfile }),
       meStats, meActions, convos, chat, sendMsg, draft: s.draft,
-      onDraft: (e) => this.setState({ draft: e.target.value }),
-      owned: s.owned, viewOwned: set({ screen: 'tickets', step: 'done', doneLines: s.owned }),
+      onDraft: (e) => this.setState({ draft: e.target.value, linkError: false }),
+      linkMode: !!s.linkMode, linkError: !!s.linkError, toggleLinkMode: () => this.setState({ linkMode: !this.state.linkMode, linkError: false, draft: '' }),
+      draftPh: s.linkMode ? 'https://…' : 'Write a message…',
+      linkBtnStyle: 'font: inherit; width: 46px; height: 46px; flex-shrink: 0; border-radius: 23px; cursor: pointer; display: flex; align-items: center; justify-content: center; padding: 0; ' + (s.linkMode ? 'background: #F843AA; color: #1A0024; border: 0;' : 'background: #23002F; color: #FFFFFF; border: 1px solid #5A2A75;'),
+      owned: s.owned, viewOwned: set({ screen: 'tickets', step: 'done', justPaid: false, doneLines: s.owned }),
       buyLabel: cartCount > 0 ? 'Go to cart' : 'Buy more',
       isCountries: s.screen === 'countries', goCountries: set({ screen: 'countries' }), countryPins, countryList, selCountry,
       progDays, events, dayLabel, savedCount, hasSaved: savedCount > 0,
@@ -1468,11 +2224,21 @@ class Component extends DCLogic {
       addClassLabel: (cart['class'] || 0) > 0 ? 'ADDED · ' + cart['class'] + ' CLASS TICKETS' : 'ADD CLASS TICKET · €25',
       isTicketsCart: isTickets && s.step === 'cart', isTicketsPay: isTickets && s.step === 'pay', isTicketsDone: isTickets && s.step === 'done',
       tGroups, cartLines, totalLabel: eur(total), payMethods, qr, doneLines: s.doneLines || [],
+      passes, passHolder: holder, walletTitle: s.justPaid ? "You're in! Your tickets" : 'My tickets',
+      hasClassCredits: !s.registered || ownedClassCredits > bookedCls.length, classCreditText: !s.registered ? 'Class tickets are personal and linked to your dancer profile. Sign in to see the QR code for each class you booked.' : (ownedClassCredits - bookedCls.length) + ' class ticket(s) not linked to a class yet. Book a class in the Classes tab and its QR code appears here.',
+      qrOpen: !!s.qrPass, qp,
+      tableShared: !!s.tableShared, shareTable: set({ tableShared: true }),
+      tableLink: 'lusitango.app/t/' + codeFor('tbl' + holder).replace('LTF27-', '').toLowerCase(),
+      tableSeatsLeft: (3 - (s.tableGuests || []).length) + ' of 3 seats left', canAddGuest: (s.tableGuests || []).length < 3,
+      addGuest: () => { const pool = [{ n: 'Marta Lopes', t: 'Accepted the invitation · has her own milonga pass \u2713', ok: true }, { n: 'Jo\u00e3o Reis', t: 'Accepted the invitation · has his own milonga ticket \u2713', ok: true }, { n: 'In\u00eas Duarte', t: 'Accepted · still needs a milonga ticket to get in', ok: false }]; const g = this.state.tableGuests || []; if (g.length < 3) this.setState({ tableGuests: g.concat([pool[g.length]]) }); },
+      tableSeats: [{ n: holder + ' (you)', t: 'Table holder', ok: true }].concat(s.tableGuests || []).concat([0, 1, 2].slice((s.tableGuests || []).length).map(() => ({ n: 'Free seat', t: s.tableShared ? 'Invitation sent · waiting for a friend' : 'Free seat · invite a friend', ok: null })))
+        .map((g) => ({ ...g, dot: 'width: 10px; height: 10px; border-radius: 5px; flex-shrink: 0; background: ' + (g.ok === true ? '#7FE0D0' : (g.ok === false ? '#FFD27A' : '#5A2A75')) + ';' })), closeQr: set({ qrPass: null }), qrMine: s.qrView !== 'scan', qrScan: s.qrView === 'scan',
+      showMine: set({ qrView: 'mine' }), showScan: set({ qrView: 'scan' }), qrTabMine: qTab(s.qrView !== 'scan'), qrTabScan: qTab(s.qrView === 'scan'),
       showPayBar, payAction, payLabel: s.step === 'cart' ? 'CHECKOUT' : 'PAY ' + eur(total),
       isLisbon: s.screen === 'lisbon', lisbonTabs, isExplore: s.lisbonTab === 'explore', isHousing: s.lisbonTab === 'housing',
       exCats, places, pins, hFilters, listings,
-      toggleNewListing: set({ newListing: !s.newListing }),
-      newListingLabel: s.newListing ? 'Listing form opens here (prototype)' : '+ Post a room or request'
+      toggleNewListing: gate('housing', set({ screen: 'post', postDone: null })),
+      newListingLabel: '+ Offer a room in your place'
     };
   }
 }
