@@ -877,10 +877,29 @@ ${(isProgram) ? html`
 
 ${(isClassList) ? html`
   <div style="display: flex; flex-direction: column; gap: 14px; padding: 16px 16px 28px">
+    ${(showClassCredits) ? html`
+      <section aria-label="My class tickets" style="background: #23002F; border: 1px solid #4A1A63; border-radius: 18px; padding: 14px 16px; display: flex; flex-direction: column; gap: 12px">
+        <span style="font-size: 11px; font-weight: 800; letter-spacing: 2px; color: #7FE0D0">MY CLASS TICKETS</span>
+        <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; text-align: center">
+          <span style="display: flex; flex-direction: column; gap: 2px; background: #1A0024; border-radius: 12px; padding: 8px 4px"><span style="font-size: 22px; font-weight: 800">${(classBought)}</span><span style="font-size: 11px; color: #A88BBB">bought</span></span>
+          <span style="display: flex; flex-direction: column; gap: 2px; background: #1A0024; border-radius: 12px; padding: 8px 4px"><span style="font-size: 22px; font-weight: 800; color: #7FE0D0">${(classBooked)}</span><span style="font-size: 11px; color: #A88BBB">booked</span></span>
+          <span style="display: flex; flex-direction: column; gap: 2px; background: #1A0024; border-radius: 12px; padding: 8px 4px"><span style="font-size: 22px; font-weight: 800; color: #F843AA">${(classLeft)}</span><span style="font-size: 11px; color: #A88BBB">left to book</span></span>
+        </div>
+        <span style="font-size: 12px; color: #D4C2E0; line-height: 1.45">${(classCreditNote)}</span>
+        <div style="display: flex; gap: 8px">
+          <button type="button" onClick=${(buyMoreClass)} style="font: inherit; flex: 1; min-height: 42px; border-radius: 21px; border: 0; background: #F843AA; color: #1A0024; font-size: 13px; font-weight: 800; cursor: pointer">+ Buy 1 more · €25</button>
+          ${(hasClassInCart) ? html`
+            <button type="button" onClick=${(goCheckoutClass)} style="font: inherit; flex: 1; min-height: 42px; border-radius: 21px; border: 1px solid #FFFFFF; background: transparent; color: #FFFFFF; font-size: 13px; font-weight: 700; cursor: pointer">Pay ${(classInCart)} in cart ›</button>
+          ` : null}
+        </div>
+      </section>
+    ` : null}
+    ${(notCouple) ? html`
     <div style="background: #3D005C; border-radius: 18px; padding: 14px 16px; display: flex; gap: 12px; align-items: center">
       <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#F843AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3 3-5 6-5s6 2 6 5M17 11a3 3 0 1 0 0-6M21 20c0-2.5-1.5-4-4-4.5"></path></svg>
       <span style="font-size: 13px; line-height: 1.4">No partner? Open any class to see who's looking and send a request.</span>
     </div>
+    ` : null}
     <div style="display: flex; gap: 8px">
       ${((classDays) || []).map((d, $index) => html`
         <button type="button" onClick=${(d.pick)} aria-pressed=${(d.on)} style=${(d.style)}>
@@ -920,6 +939,12 @@ ${(isClassDetail) ? html`
         <button type="button" onClick=${(bookClass)} aria-pressed=${(clsBooked)} style=${(bookStyle)}>${(bookLabel)}</button>
         <button type="button" onClick=${(followClass)} aria-pressed=${(clsFollowing)} style=${(followStyle)}>${(followLabel)}</button>
       </div>
+      ${(clsTicketReady) ? html`
+        <button type="button" onClick=${(openClsTicket)} style="font: inherit; width: 100%; margin-top: 8px; min-height: 46px; padding: 0 16px; border-radius: 23px; border: 1px solid #7FE0D0; background: transparent; color: #7FE0D0; font-size: 13px; font-weight: 800; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 8px"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h3v3h-3zM20 14v.01M14 20h.01M17 20h4v-3"></path></svg>Paid · Show my ticket QR ›</button>
+      ` : null}
+      ${(clsTicketUnpaid) ? html`
+        <button type="button" onClick=${(goCheckoutClass)} style="font: inherit; width: 100%; margin-top: 8px; min-height: 46px; padding: 0 16px; border-radius: 23px; border: 1px solid #FFD27A; background: transparent; color: #FFD27A; font-size: 13px; font-weight: 800; cursor: pointer">Booked · waiting for payment · Pay in cart ›</button>
+      ` : null}
     </section>
 
     ${(matched) ? html`
@@ -992,10 +1017,22 @@ ${(isTicketsCart) ? html`
     ${(isCouple) ? html`
       <div style="background: #23002F; border: 1px solid #FFD27A; border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.45"><strong style="color: #FFD27A">Couple account</strong> · every ticket below is for two people. [Couple prices to be set by the organizers: shown as 2 × single price for now.]</div>
     ` : null}
-    <div style="display: flex; gap: 10px; align-items: flex-start; background: #23002F; border-radius: 14px; padding: 12px 14px; font-size: 12px; color: #D4C2E0; line-height: 1.5">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#A88BBB" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 2px"><path d="M12 8v5M12 16h.01M12 21a9 9 0 1 0 0-18 9 9 0 0 0 0 18z"></path></svg>
-      <span style="font-size: 14px"><strong style="color: rgb(255, 255, 255)">This is will be your festival passport:</strong> <br />You can register as a single person or couple and the prices will reflect that choice.<br /><br />For the special show you don't need to register as a dancer and can bring up to 4 friends with you or share a table up with random people.</span>
-    </div>
+    <section aria-label="Festival passport conditions" style="position: relative; overflow: hidden; background: linear-gradient(160deg, #2E0640 0%, #1A0024 100%); border: 1px solid #E8C76A; border-radius: 16px; padding: 0; color: #FFFFFF">
+      <div style="display: flex; align-items: center; justify-content: space-between; gap: 10px; padding: 12px 14px; border-bottom: 1px dashed rgba(232, 199, 106, 0.5)">
+        <span style="display: flex; flex-direction: column; gap: 2px">
+          <span style="font-size: 10px; font-weight: 800; letter-spacing: 3px; color: #E8C76A">FESTIVAL PASSPORT</span>
+          <span style="font-size: 11px; letter-spacing: 1.5px; color: #D4C2E0">LISBON TANGO FESTIVAL · 2027</span>
+        </span>
+        <span aria-hidden="true" style="width: 46px; height: 46px; flex-shrink: 0; border-radius: 23px; border: 2px solid #E8C76A; color: #E8C76A; display: flex; flex-direction: column; align-items: center; justify-content: center; transform: rotate(-12deg); font-size: 7px; font-weight: 800; letter-spacing: 1px; line-height: 1.2; text-align: center">LTF<span style="font-size: 12px; letter-spacing: 0">2027</span>LISBOA</span>
+      </div>
+      <div style="display: flex; flex-direction: column; gap: 10px; padding: 12px 14px 10px">
+        <span style="font-size: 14px; font-weight: 700">This will be your festival passport</span>
+        <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.45; color: #E9DDF0"><span style="flex-shrink: 0; width: 20px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; color: #E8C76A; padding-top: 1px">01</span><span>You can register as a single person or a couple, and the prices will reflect that choice.</span></div>
+        <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.45; color: #E9DDF0"><span style="flex-shrink: 0; width: 20px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; color: #E8C76A; padding-top: 1px">02</span><span>One of each ticket per holder. Tickets are personal and not transferable.</span></div>
+        <div style="display: flex; gap: 10px; align-items: flex-start; font-size: 13px; line-height: 1.45; color: #E9DDF0"><span style="flex-shrink: 0; width: 20px; font-family: ui-monospace, Menlo, monospace; font-size: 11px; font-weight: 700; color: #E8C76A; padding-top: 1px">03</span><span>For the special show you don't need to register as a dancer, and you can bring up to 4 friends with you or share a table with other people.</span></div>
+      </div>
+      <div aria-hidden="true" style="background: rgba(232, 199, 106, 0.08); padding: 8px 14px; font-family: ui-monospace, Menlo, monospace; font-size: 10px; letter-spacing: 1.5px; color: rgba(232, 199, 106, 0.75); line-height: 1.5; white-space: nowrap; overflow: hidden">P‹LTF2027‹‹FESTIVAL‹PASSPORT‹‹‹‹‹‹‹‹<br />LISBOA‹‹26‹30‹MAY‹‹TANGO‹‹‹‹‹‹‹‹</div>
+    </section>
     ${(hasOwned) ? html`
       <button type="button" onClick=${(viewOwned)} style="font: inherit; text-align: left; display: flex; gap: 12px; align-items: center; background: #F3E8F8; color: #25002B; border: 0; border-radius: 16px; padding: 12px 14px; cursor: pointer">
         <span style="width: 44px; height: 44px; flex-shrink: 0; border-radius: 10px; background: #25002B; display: flex; align-items: center; justify-content: center"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h2M18 14h2v2M14 18h2v2h-2zM20 20h0"></path></svg></span>
@@ -1011,18 +1048,33 @@ ${(isTicketsCart) ? html`
         </div>
         <div style="background: #23002F; border-radius: 18px; padding: 4px 14px">
           ${((g.items) || []).map((it, $index) => html`
+            ${(it.isNightList) ? html`
+              <div style="display: flex; flex-direction: column; gap: 2px; padding: 12px 0 6px">
+                <span style="font-size: 14px; font-weight: 600">${(it.n)}</span>
+                <span style="font-size: 12px; color: #D4C2E0">${(it.sub)}</span>
+                ${(it.isIncluded) ? html`
+                  <button type="button" onClick=${(viewOwned)} style="font: inherit; align-self: flex-start; margin-top: 4px; min-height: 28px; padding: 0 10px; border-radius: 14px; border: 1px solid #7FE0D0; background: transparent; color: #7FE0D0; font-size: 11px; font-weight: 800; cursor: pointer">✓ In your pass · QR ›</button>
+                ` : null}
+              </div>
+              ${((it.nightRows) || []).map((nr, $index) => html`
+                <div style="display: flex; align-items: center; gap: 10px; min-height: 56px; border-bottom: 1px solid #3A0F50; padding: 4px 0 4px 12px; border-left: 2px solid #3A0F50">
+                  <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0">
+                    <span style="font-size: 14px; font-weight: 600">${(nr.day)}</span>
+                    <span style="font-size: 12px; color: #D4C2E0">${(nr.date)}</span>
+                  </span>
+                  <span style=${"font-size: 15px; font-weight: 700; color: " + String((accent)) + "; min-width: 44px; text-align: right"}>${(nr.price)}</span>
+                  <button type="button" onClick=${(nr.toggle)} aria-pressed=${(nr.on)} aria-disabled=${(nr.off)} aria-label=${(nr.aria)} style=${(nr.style)}>${(nr.label)}</button>
+                </div>
+              `)}
+              ${(it.hasNightHint) ? html`
+                <span style=${(it.hintStyle)}>${(it.nightHint)}</span>
+              ` : null}
+            ` : null}
+            ${(it.plain) ? html`
             <div style="display: flex; align-items: center; gap: 10px; min-height: 64px; border-bottom: 1px solid #3A0F50; padding: 8px 0">
               <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0">
                 <span style="font-size: 14px; font-weight: 600">${(it.n)}</span>
                 <span style="font-size: 12px; color: #D4C2E0">${(it.sub)}</span>
-                ${(it.hasNights) ? html`
-                  <span style="font-size: 11px; font-weight: 700; letter-spacing: 1px; color: #7FE0D0; margin-top: 6px">PICK YOUR NIGHT</span>
-                  <span style="display: flex; flex-wrap: wrap; gap: 6px; margin-top: 4px">
-                    ${((it.nightChips) || []).map((nc, $index) => html`
-                      <button type="button" onClick=${(nc.pick)} aria-pressed=${(nc.on)} style=${(nc.style)}>${(nc.n)}</button>
-                    `)}
-                  </span>
-                ` : null}
                 ${(it.isOwned) ? html`
                   <button type="button" onClick=${(viewOwned)} style="font: inherit; align-self: flex-start; margin-top: 4px; min-height: 28px; padding: 0 10px; border-radius: 14px; border: 0; background: #7FE0D0; color: #1A0024; font-size: 11px; font-weight: 800; letter-spacing: 0.5px; white-space: nowrap; cursor: pointer">✓ ${(it.ownedLabel)} · QR ›</button>
                 ` : null}
@@ -1042,6 +1094,7 @@ ${(isTicketsCart) ? html`
                 <button type="button" onClick=${(it.toggle)} aria-pressed=${(it.inCart)} aria-disabled=${(it.unavailable)} style=${(it.toggleStyle)}>${(it.toggleLabel)}</button>
               ` : null}
             </div>
+            ` : null}
           `)}
         </div>
       </section>
@@ -1236,6 +1289,17 @@ ${(qrOpen) ? html`
           </div>
         </div>
         <span style="font-family: ui-monospace, Menlo, monospace; font-size: 15px; font-weight: 700; letter-spacing: 2px">${(qp.code)}</span>
+        ${(qp.hasPartner) ? html`
+          <div style="width: 100%; box-sizing: border-box; display: flex; gap: 12px; align-items: center; background: #23002F; border: 1px solid #7FE0D0; border-radius: 16px; padding: 12px 14px; text-align: left">
+            <span style="width: 44px; height: 44px; border-radius: 22px; background: #7FE0D0; color: #1A0024; font-size: 18px; font-weight: 800; display: flex; align-items: center; justify-content: center; flex-shrink: 0">${(qp.ptInitial)}</span>
+            <span style="display: flex; flex-direction: column; gap: 2px; flex: 1; min-width: 0">
+              <span style="font-size: 10px; font-weight: 800; letter-spacing: 1.5px; color: #7FE0D0">YOUR PARTNER FOR THIS CLASS</span>
+              <span style="font-size: 15px; font-weight: 700">${(qp.ptName)}</span>
+              <span style="font-size: 12px; color: #D4C2E0">${(qp.ptSub)}</span>
+            </span>
+            <span style=${(qp.ptBadgeStyle)}>${(qp.ptBadge)}</span>
+          </div>
+        ` : null}
         <div style="width: 100%; background: #23002F; border-radius: 16px; padding: 4px 14px; box-sizing: border-box; text-align: left">
           ${((qp.rows) || []).map((r, $index) => html`
             <div style="display: flex; justify-content: space-between; gap: 12px; min-height: 40px; align-items: center; border-bottom: 1px solid #3A0F50; font-size: 13px"><span style="color: #A88BBB">${(r.k)}</span><span style="font-weight: 700; text-align: right">${(r.v)}</span></div>
@@ -1594,10 +1658,19 @@ class Component extends DCLogic {
     // MY SCHEDULE
     const clsStatus = s.myClasses[cls.id];
     const setClassStatus = (id, st) => this.setState({ myClasses: { ...s.myClasses, [id]: st } });
+    const classBought = (s.owned || []).filter((o) => /^Class ticket/.test(o.base || o.n)).reduce((a, o) => a + o.qty, 0);
+    const classBooked = Object.keys(s.myClasses || {}).filter((k) => s.myClasses[k] === 'booked').length;
+    const classInCart = (s.cart || {})['class'] || 0;
+    const classFree = classBought + classInCart - classBooked;
     const bookClass = () => {
       if (clsStatus === 'booked') { setClassStatus(cls.id, null); return; }
+      if (classFree > 0) { setClassStatus(cls.id, 'booked'); return; }
       this.setState({ myClasses: { ...s.myClasses, [cls.id]: 'booked' }, cart: { ...s.cart, class: (s.cart['class'] || 0) + 1 } });
     };
+    const bookedOrder = allClasses.filter((c) => (s.myClasses || {})[c.id] === 'booked').map((c) => c.id);
+    const clsRank = bookedOrder.indexOf(cls.id);
+    const clsPaid = !!s.registered && clsRank >= 0 && clsRank < classBought;
+    const classSummaryShort = 'Bought ' + classBought + ' · booked ' + classBooked + ' · ' + Math.max(0, classBought - classBooked) + ' left';
     const followClass = () => setClassStatus(cls.id, clsStatus === 'following' ? null : 'following');
     const btnBase = 'font: inherit; min-height: 46px; border-radius: 23px; font-weight: 700; letter-spacing: 0.5px; cursor: pointer; font-size: 13px; ';
     const bookStyle = btnBase + (clsStatus === 'booked' ? 'background: #7FE0D0; color: #1A0024; border: 0;' : 'background: ' + accent + '; color: #1A0024; border: 0;');
@@ -1790,7 +1863,7 @@ class Component extends DCLogic {
 
     // TICKETS
     const tGroupsRaw = [
-      { g: 'Tango & Fado Live Show', note: 'Wed 26 May · 21:00 · up to 4 tickets per order, enough for a whole VIP table · no account needed', items: [
+      { g: 'Tango & Fado Live Show', note: 'Wed 26 May · 21:00 · no account needed · you can share this table with up to 4 friends by sending them their QR code inside the app', items: [
         { id: 'vip', n: 'VIP table seat', d: '1 seat at a table of 4 · shared champagne', p: 50 },
         { id: 'balc', n: 'Balcony seat', d: 'No assigned seats', p: 25 }] },
       { g: 'Evening Gran Milongas', note: '22:00 – 04:00 (Wed from 23:00) · no assigned seats', items: [
@@ -1798,12 +1871,10 @@ class Component extends DCLogic {
         { id: 'ev-wed', n: 'Wednesday', d: '26 May', p: 20 }, { id: 'ev-thu', n: 'Thursday', d: '27 May', p: 35 },
         { id: 'ev-fri', n: 'Friday', d: '28 May', p: 35 }, { id: 'ev-sat', n: 'Saturday', d: '29 May', p: 40 },
         { id: 'ev-sun', n: 'Sunday', d: '30 May', p: 30 }] },
-      { g: 'Reserved milonga tables', note: '4 seats, per night · sold in addition to milonga tickets', items: [
-        { id: 'tb-a', n: 'Table · Wed, Thu or Sun', d: '4 seats, one night · milonga entry not included', p: 40, nights: ['Wed 26 May', 'Thu 27 May', 'Sun 30 May'] },
-        { id: 'tb-b', n: 'Table · Fri or Sat', d: '4 seats, one night · milonga entry not included', p: 60, nights: ['Fri 28 May', 'Sat 29 May'] }] },
+      { g: 'Reserve milonga table for you + 3 people.', note: '4 seats, per night · sold in addition to milonga tickets', items: [
+        { id: 'tb', n: 'Table in your name.', d: 'One table per night · 4 seats · milonga entry not included · 10% off when you book all 5 nights\nShare this ticket from a link in yout wallet.', p: 40, unit: 'nights', nights: ['Wed 26 May', 'Thu 27 May', 'Fri 28 May', 'Sat 29 May', 'Sun 30 May'], nightPrices: { 'Wed 26 May': 40, 'Thu 27 May': 40, 'Fri 28 May': 60, 'Sat 29 May': 60, 'Sun 30 May': 40 } }] },
       { g: 'Afternoon Milongas', note: '16:00 – 20:00 · Thursday to Sunday', items: [
-        { id: 'all-af', n: 'All 4 afternoon milongas', d: 'Discount package · best value', p: 50 },
-        { id: 'af', n: 'Single afternoon milonga', d: 'Thu, Fri, Sat or Sun', p: 15 }] },
+        { id: 'af', n: 'Afternoon milonga', d: 'One ticket per afternoon · 10% off when you pick all 4', p: 15, unit: 'afternoons', nights: ['Thu 27 May', 'Fri 28 May', 'Sat 29 May', 'Sun 30 May'], nightPrices: { 'Thu 27 May': 15, 'Fri 28 May': 15, 'Sat 29 May': 15, 'Sun 30 May': 15 } }] },
       { g: 'Classes', note: 'Group class · 1 h 15 min', items: [
         { id: 'class', n: 'Class ticket', d: 'One ticket per class you book · choose your classes in the Classes tab', p: 25 }] }
     ];
@@ -1813,9 +1884,15 @@ class Component extends DCLogic {
     const mult = isCouple ? 2 : 1;
     const setQty = (id, q) => {
       if ((id === 'vip' || id === 'balc') && q > (cart[id] || 0)) { const other = id === 'vip' ? (cart.balc || 0) : (cart.vip || 0); if ((q + other) * mult > 4) return; }
-      if (id !== 'vip' && id !== 'balc' && id !== 'class' && q > (cart[id] || 0)) { const it = allItems.find((x) => x.id === id); const own = (s.owned || []).filter((o) => (o.base || o.n) === it.n).reduce((a, o) => a + o.qty, 0); if (q + own > 1) return; }
+      if (id !== 'vip' && id !== 'balc' && id !== 'class' && q > (cart[id] || 0)) { const it = allItems.find((x) => x.id === id); if (it.nights) { this.setState({ cart: { ...cart, [id]: Math.max(0, q) } }); return; } const own = (s.owned || []).filter((o) => (o.base || o.n) === it.n).reduce((a, o) => a + o.qty, 0); if (q + own > 1) return; }
       this.setState({ cart: { ...cart, [id]: Math.max(0, q) } });
     };
+    const ownedNightsOf = (name) => (s.owned || []).filter((o) => (o.base || o.n) === name).reduce((a, o) => a.concat(o.nights || (o.night ? [o.night] : [])), []);
+    const selNights = (it) => ((s.nightSel || {})[it.id] || []).filter((nn) => it.nights.indexOf(nn) >= 0);
+    const nightFull = (it) => selNights(it).reduce((a, nn) => a + it.nightPrices[nn], 0);
+    const nightAll = (it) => selNights(it).length === it.nights.length;
+    const nightTotal = (it) => Math.round(nightFull(it) * (nightAll(it) ? 0.9 : 1) * 100) / 100;
+    const setNights = (it, arr) => { const ordered = it.nights.filter((nn) => arr.indexOf(nn) >= 0); this.setState({ nightSel: { ...(this.state.nightSel || {}), [it.id]: ordered }, cart: { ...this.state.cart, [it.id]: ordered.length } }); };
     const tGroups = tGroupsRaw.map((g) => ({ ...g, items: g.items.map((it) => {
       const q = cart[it.id] || 0;
       const ownedQty = (s.owned || []).filter((o) => (o.base || o.n) === it.n).reduce((acc, o) => acc + o.qty, 0);
@@ -1825,22 +1902,37 @@ class Component extends DCLogic {
       const includedIn = ownedQty ? '' : (/^ev-/.test(it.id) && has('All 5 Gran Milongas') ? 'All 5 Gran Milongas pass' : (it.id === 'af' && has('All 4 afternoon milongas') ? 'All 4 afternoon milongas pass' : ''));
       const atMax = (it.id === 'vip' || it.id === 'balc') ? ((cart.vip || 0) + (cart.balc || 0) + 1) * mult > 4 : (it.id === 'class' ? false : q + ownedQty >= 1 || !!includedIn);
       const multi = it.id === 'vip' || it.id === 'balc' || it.id === 'class';
-      const unavailable = !multi && (ownedQty > 0 || !!includedIn || coveredInCart);
-      const incFn = it.id === 'class' ? gate('classes', () => setQty(it.id, q + 1)) : () => setQty(it.id, q + 1);
+      const blockedAll = !!includedIn || coveredInCart;
+      const ownNights = it.nights ? ownedNightsOf(it.n) : [];
+      const freeNights = it.nights ? it.nights.filter((nn) => ownNights.indexOf(nn) < 0) : [];
+      const sel = it.nights ? selNights(it) : [];
+      const unavailable = !multi && (it.nights ? (freeNights.length === 0 || !!includedIn || coveredInCart) : (ownedQty > 0 || !!includedIn || coveredInCart));
+      const incFn = it.id === 'class' ? gate('classes', () => setQty(it.id, q + 1)) : (it.nights ? () => setNights(it, [freeNights[0]]) : () => setQty(it.id, q + 1));
       const tBase = 'font: inherit; min-width: 92px; min-height: 36px; padding: 0 12px; border-radius: 18px; font-size: 13px; font-weight: 800; letter-spacing: 0.3px; ';
-      const nightSel = (s.tableNight || {})[it.id] || (it.nights ? it.nights[0] : '');
-      const nightChips = (it.nights || []).map((nn) => ({ n: nn.replace(' May', ''), on: nn === nightSel, pick: () => this.setState({ tableNight: { ...(this.state.tableNight || {}), [it.id]: nn } }),
-        style: 'font: inherit; min-height: 32px; padding: 0 12px; border-radius: 16px; font-size: 12px; font-weight: 700; cursor: pointer; ' + (nn === nightSel ? 'background: #7FE0D0; color: #1A0024; border: 0;' : 'background: transparent; color: #FFFFFF; border: 1px solid #5A2A75;') }));
-      return { ...it, hasNights: !!it.nights && q > 0, nightChips: nightChips, multi: multi, single: !multi, inCart: q > 0, unavailable: unavailable, atMin: q === 0,
+      const nightChips = (it.nights || []).map((nn) => { const own = ownNights.indexOf(nn) >= 0; const on = sel.indexOf(nn) >= 0;
+        return { n: (own ? '\u2713 ' : '') + nn.replace(' May', ''), on: on, pick: own ? () => {} : () => setNights(it, on ? sel.filter((x) => x !== nn) : sel.concat([nn])),
+          style: 'font: inherit; min-height: 32px; padding: 0 12px; border-radius: 16px; font-size: 12px; font-weight: 700; ' + (own ? 'background: #3A1A4A; color: #7A5A8A; border: 0; cursor: not-allowed;' : (on ? 'background: #7FE0D0; color: #1A0024; border: 0; cursor: pointer;' : 'background: transparent; color: #FFFFFF; border: 1px solid #5A2A75; cursor: pointer;')) }; });
+      const allSel = it.nights && sel.length === it.nights.length;
+      const fullPrice = it.nights ? it.nights.reduce((x, nn) => x + it.nightPrices[nn], 0) * mult : 0;
+      const nightHint = !it.nights || blockedAll ? '' : (allSel ? '\u2713 All ' + it.nights.length + ' ' + it.unit + ' selected \u00b7 10% off: ' + eur(Math.round(fullPrice * 0.9)) + ' instead of ' + eur(fullPrice) : (ownNights.length ? '' : 'Select all ' + it.nights.length + ' ' + it.unit + ' for 10% off (' + eur(Math.round(fullPrice * 0.9)) + ' instead of ' + eur(fullPrice) + ')'));
+      const dayName = { Wed: 'Wednesday', Thu: 'Thursday', Fri: 'Friday', Sat: 'Saturday', Sun: 'Sunday' };
+      const blocked = !!includedIn || coveredInCart;
+      const nightRows = (it.nights || []).map((nn) => { const own = ownNights.indexOf(nn) >= 0; const on = sel.indexOf(nn) >= 0; const off = own || blocked;
+        return { day: dayName[nn.slice(0, 3)], date: nn.slice(4) + (it.id === 'tb' ? ' \u00b7 table for 4' : ' \u00b7 16:00 \u2013 20:00'), price: eur(it.nightPrices[nn] * mult), on: on, off: off,
+          aria: (on ? 'Remove ' : 'Add ') + it.n + ' ' + nn,
+          label: own ? 'Bought' : (blocked ? 'Included' : (on ? '\u2713 Remove' : '+ Add ticket')),
+          toggle: off ? () => {} : () => setNights(it, on ? sel.filter((x) => x !== nn) : sel.concat([nn])),
+          style: tBase + (off ? 'border: 0; background: #3A1A4A; color: #7A5A8A; cursor: not-allowed;' : (on ? 'border: 1px solid #F843AA; background: #3D005C; color: #FFFFFF; cursor: pointer;' : 'border: 0; background: #F843AA; color: #1A0024; cursor: pointer;')) }; });
+      return { ...it, hintStyle: 'display: block; font-size: 12px; font-weight: 700; padding: 10px 0 6px; color: ' + (allSel ? '#7FE0D0' : '#FFD27A') + ';', isNightList: !!it.nights, plain: !it.nights, nightRows: nightRows, hasNights: !!it.nights && (q > 0 || ownNights.length > 0) && !includedIn && !coveredInCart, nightChips: nightChips, pickLabel: it.pickLabel || 'PICK YOUR NIGHT', nightHint: nightHint, hasNightHint: !!nightHint, multi: multi, single: !multi, inCart: q > 0, unavailable: unavailable, atMin: q === 0,
         decStyle: 'font: inherit; width: 36px; height: 36px; border-radius: 18px; font-size: 18px; padding: 0; background: transparent; ' + (q === 0 ? 'border: 1px solid #3A1A4A; color: #5A3A6A; cursor: not-allowed;' : 'border: 1px solid #5A2A75; color: #FFFFFF; cursor: pointer;'),
-        toggle: unavailable ? () => {} : (q > 0 ? () => setQty(it.id, 0) : incFn),
-        toggleLabel: unavailable ? (ownedQty > 0 ? 'Bought' : 'Included') : (q > 0 ? '\u2713 Remove' : '+ Add ticket'),
+        toggle: unavailable ? () => {} : (q > 0 ? (it.nights ? () => setNights(it, []) : () => setQty(it.id, 0)) : incFn),
+        toggleLabel: unavailable ? (ownedQty > 0 && !(it.nights && !includedIn && !coveredInCart && freeNights.length) ? 'Bought' : 'Included') : (q > 0 ? '\u2713 Remove' : '+ Add ticket'),
         toggleStyle: tBase + (unavailable ? 'border: 0; background: #3A1A4A; color: #7A5A8A; cursor: not-allowed;' : (q > 0 ? 'border: 1px solid #F843AA; background: #3D005C; color: #FFFFFF; cursor: pointer;' : 'border: 0; background: #F843AA; color: #1A0024; cursor: pointer;')),
-        atMax: atMax, incStyle: 'font: inherit; width: 36px; height: 36px; border-radius: 18px; border: 0; font-size: 18px; font-weight: 700; padding: 0; ' + (atMax ? 'background: #3A1A4A; color: #7A5A8A; cursor: not-allowed;' : 'background: #F843AA; color: #1A0024; cursor: pointer;'), sub: it.d, qty: q, price: eur(it.p * mult), isOwned: ownedQty > 0, ownedLabel: 'BOUGHT' + (ownedQty > 1 ? ' ×' + ownedQty : ''), isIncluded: !!includedIn, includedIn: includedIn, inc: it.id === 'class' ? gate('classes', () => setQty(it.id, q + 1)) : () => setQty(it.id, q + 1), dec: () => setQty(it.id, q - 1), incLabel: 'Add one ' + it.n, decLabel: 'Remove one ' + it.n };
+        atMax: atMax, incStyle: 'font: inherit; width: 36px; height: 36px; border-radius: 18px; border: 0; font-size: 18px; font-weight: 700; padding: 0; ' + (atMax ? 'background: #3A1A4A; color: #7A5A8A; cursor: not-allowed;' : 'background: #F843AA; color: #1A0024; cursor: pointer;'), sub: it.id === 'class' && s.registered ? classSummaryShort : it.d, qty: q, price: eur(it.p * mult), isOwned: ownedQty > 0, ownedLabel: 'BOUGHT' + (ownedQty > 1 ? ' ×' + ownedQty : ''), isIncluded: !!includedIn, includedIn: includedIn, inc: it.id === 'class' ? gate('classes', () => setQty(it.id, q + 1)) : () => setQty(it.id, q + 1), dec: () => setQty(it.id, q - 1), incLabel: 'Add one ' + it.n, decLabel: 'Remove one ' + it.n };
     }) }));
-    const cartLines = allItems.filter((it) => (cart[it.id] || 0) > 0).map((it) => ({ base: it.n, night: it.nights ? ((s.tableNight || {})[it.id] || it.nights[0]) : '', n: it.n + (it.nights ? ' · ' + ((s.tableNight || {})[it.id] || it.nights[0]) : '') + (isCouple ? ' (couple)' : ''), qty: cart[it.id], total: eur(cart[it.id] * it.p * mult) }));
+    const cartLines = allItems.filter((it) => (cart[it.id] || 0) > 0).map((it) => ({ base: it.n, nights: it.nights ? selNights(it) : null, n: it.n + (it.nights ? (nightAll(it) ? ' · all ' + it.nights.length + ' ' + it.unit + ' (10% off)' : ' · ' + selNights(it).map((x) => x.replace(' May', '')).join(', ')) : '') + (isCouple ? ' (couple)' : ''), qty: cart[it.id], total: eur((it.nights ? nightTotal(it) : cart[it.id] * it.p) * mult) }));
     const cartCount = allItems.reduce((a, it) => a + (cart[it.id] || 0), 0);
-    const total = allItems.reduce((a, it) => a + (cart[it.id] || 0) * it.p * mult, 0);
+    const total = allItems.reduce((a, it) => a + (it.nights ? ((cart[it.id] || 0) ? nightTotal(it) : 0) : (cart[it.id] || 0) * it.p) * mult, 0);
     const payDefs = [{ id: 'apple', n: 'Apple Pay' }, { id: 'google', n: 'Google Pay' }, { id: 'mbway', n: 'MB WAY' }, { id: 'card', n: 'Credit or debit card' }];
     const payMethods = payDefs.map((m) => ({ ...m, on: s.pay === m.id, dot: s.pay === m.id ? '#F843AA' : 'transparent',
       style: 'font: inherit; min-height: 54px; padding: 0 16px; border-radius: 16px; cursor: pointer; display: flex; justify-content: space-between; align-items: center; font-size: 15px; font-weight: 600; color: #FFFFFF; background: #23002F; border: 1px solid ' + (s.pay === m.id ? '#F843AA' : '#4A1A63') + ';',
@@ -1883,32 +1975,43 @@ class Component extends DCLogic {
         for (let i = 0; i < o.qty; i++) passList.push({ id: 'show-' + oi + '-' + i, kind: 'TANGO & FADO SHOW', color: '#FFD27A', title: n + ' ' + (i + 1) + ' of ' + o.qty,
           short: 'Wed 26 May · 21:00 · Venue 1',
           rows: [['When', 'Wed 26 May · doors 20:30'], ['Where', 'Venue 1 · show entrance'], ['Seat', n === 'VIP table seat' ? 'VIP table 3 · seat ' + (i + 1) : 'Balcony · free seating'], ['Admits', coupleP ? '2 people' : '1 person']],
-          rule: 'Show seats are the only tickets you can pass on: forward this code to the friend using this seat.',
+          rule: 'Show seats are the only tickets you can pass on: send this QR code to the friend using this seat, inside the app.',
           verdict: 'VALID · ENTRY OK', allow: 'Tango & Fado Live Show · ' + n, where: 'Show entrance · Venue 1', check: 'Show the guest to ' + (n === 'VIP table seat' ? 'VIP table 3.' : 'the balcony.') + ' No ID needed for show seats.' });
         return;
       }
+      (o.nights && o.nights.length ? o.nights : [o.night || null]).forEach((nt, k) => {
       let p = null;
       if (n === 'All 5 Gran Milongas') p = { kind: 'MILONGA PASS', color: '#F843AA', short: 'Wed 26 – Sun 30 May · 22:00 – 04:00', rows: [['Valid', 'All 5 evenings · Wed 26 – Sun 30 May'], ['Time', '22:00 – 04:00'], ['Where', 'Venue 1 entrance']], allow: 'Evening Gran Milonga · tonight (night 1 of 5)', where: 'Venue 1 entrance', check: 'First scan: give the festival wristband. One entry per night.' };
       else if (evDays[n]) p = { kind: 'EVENING MILONGA', color: '#F843AA', title: 'Gran Milonga · ' + n, short: evDays[n] + ' · 22:00 – 04:00', rows: [['Valid', evDays[n] + ' only'], ['Time', '22:00 – 04:00'], ['Where', 'Venue 1 entrance']], allow: 'Evening Gran Milonga · ' + evDays[n], where: 'Venue 1 entrance', check: 'Valid for this one night only.' };
       else if (n === 'All 4 afternoon milongas') p = { kind: 'AFTERNOON PASS', color: '#C9A6FF', short: 'Thu 27 – Sun 30 May · 16:00 – 20:00', rows: [['Valid', 'All 4 afternoons · Thu 27 – Sun 30 May'], ['Time', '16:00 – 20:00'], ['Where', 'Venue 2 entrance']], allow: 'Afternoon milonga · today (1 of 4)', where: 'Venue 2 entrance', check: 'One entry per afternoon.' };
-      else if (n === 'Single afternoon milonga') p = { kind: 'AFTERNOON MILONGA', color: '#C9A6FF', short: 'One afternoon · 16:00 – 20:00', rows: [['Valid', 'One afternoon of your choice'], ['Time', '16:00 – 20:00'], ['Where', 'Venue 2 entrance']], allow: 'Afternoon milonga · one entry', where: 'Venue 2 entrance', check: 'Single entry, then the code is used.' };
-      else if (/^Table/.test(n)) { const night = o.night || (/Fri or Sat/.test(n) ? 'Sat 29 May' : 'Thu 27 May'); const joined = s.tableGuests || [];
+      else if (n === 'Single afternoon milonga' || n === 'Afternoon milonga') p = { kind: 'AFTERNOON MILONGA', color: '#C9A6FF', title: 'Afternoon milonga · ' + (nt || 'one afternoon'), short: (nt || 'One afternoon') + ' · 16:00 – 20:00', rows: [['Valid', nt ? nt + ' only' : 'One afternoon of your choice'], ['Time', '16:00 – 20:00'], ['Where', 'Venue 2 entrance']], allow: 'Afternoon milonga · one entry', where: 'Venue 2 entrance', check: 'Single entry, then the code is used.' };
+      else if (/^(Table|Reserved table)/.test(n)) { const night = nt || (/Fri or Sat/.test(n) ? 'Sat 29 May' : 'Thu 27 May'); const joined = (s.tableGuests || {})['o-' + oi + '-' + k] || [];
         p = { kind: 'RESERVED TABLE', verdict: 'VALID · TABLE 12', color: '#7FE0D0', title: 'Reserved table · ' + night, short: 'Table 12 · 4 seats · ' + night, isTable: true, rows: [['Night', night], ['Table', 'Table 12 · 4 seats'], ['Includes', 'Table only · no milonga entry'], ['Where', 'Gran Milonga · Venue 1'], ['Friends invited', joined.length ? joined.map((g) => g.n.split(' ')[0]).join(', ') : 'none yet']],
           allow: 'Table 12 · 4 seats · ' + night, where: 'Table host · Venue 1', check: 'This code is for the table only, not milonga entry. Only the holder has it. Seat the holder at table 12; invited friends (listed above) may join them. Everyone, holder included, enters the milonga with their own milonga ticket.', guests: joined }; }
       else p = { kind: 'TICKET', color: '#F843AA', short: '', rows: [], allow: n, where: 'Venue entrance', check: '' };
-      passList.push({ id: 'o-' + oi, title: n, ...p, rows: p.isTable ? p.rows : p.rows.concat([['Admits', admitsTxt]]), rule: personalRule, verdict: p.verdict || 'VALID · ENTRY OK' });
+      passList.push({ id: 'o-' + oi + '-' + k, title: n, ...p, rows: p.isTable ? p.rows : p.rows.concat([['Admits', admitsTxt]]), rule: personalRule, verdict: p.verdict || 'VALID · ENTRY OK' });
+      });
     });
     const bookedCls = s.registered ? allClasses.filter((c) => (s.myClasses || {})[c.id] === 'booked') : [];
-    bookedCls.forEach((c) => passList.push({ id: 'cls-' + c.id, kind: 'CLASS', color: '#7FE0D0', title: c.topic, short: c.dayLabel + ' · ' + c.time + ' · ' + c.room,
-      rows: [['When', c.dayLabel + ' · ' + c.time], ['Room', c.room], ['Maestros', c.couple], ['Level', c.level], ['Role', coupleP ? 'Leader + follower (couple)' : (s.role === 'leader' ? 'Leader' : (s.role === 'both' ? 'Leader or follower' : 'Follower'))], ['Admits', admitsTxt]],
-      rule: personalRule, verdict: 'CHECK-IN OK', allow: c.topic + ' · ' + c.time, where: c.room + ' · class room door', check: 'Mark on the attendance list. Helps keep leaders and followers balanced in the room.' }));
+    const partnerFor = (c) => {
+      if (coupleP) return { st: 'couple', name: (regP.partnerName || 'Your partner').trim(), sub: 'Your couple partner · same booking', badge: 'COUPLE' };
+      if ((s.incoming || {})[c.id] === 'accepted') return { st: 'matched', name: 'Jonas · Germany', sub: 'Leader · Very active social dancer', badge: 'MATCHED \u2713' };
+      const sentTo = peopleRaw.filter((pp) => (s.sent || {})[c.id + '-' + pp.id]);
+      if (sentTo.length) return { st: 'waiting', name: sentTo.map((pp) => pp.n).join(', '), sub: 'Request sent · waiting for an answer', badge: 'WAITING' };
+      return null;
+    };
+    bookedCls.forEach((c) => { const pt = partnerFor(c); passList.push({ id: 'cls-' + c.id, kind: 'CLASS', color: '#7FE0D0', title: c.topic, short: c.dayLabel + ' · ' + c.time + ' · ' + c.room + (pt && pt.st !== 'waiting' ? ' · with ' + pt.name.split(' ')[0] : ''),
+      partner: pt, rows: [['When', c.dayLabel + ' · ' + c.time], ['Room', c.room], ['Maestros', c.couple], ['Level', c.level], ['Role', coupleP ? 'Leader + follower (couple)' : (s.role === 'leader' ? 'Leader' : (s.role === 'both' ? 'Leader or follower' : 'Follower'))], ['Partner', pt ? (pt.st === 'waiting' ? 'Waiting for ' + pt.name : pt.name) : 'None yet · teachers rotate partners'], ['Admits', admitsTxt]],
+      rule: personalRule, verdict: 'CHECK-IN OK', allow: c.topic + ' · ' + c.time, where: c.room + ' · class room door', check: pt && pt.st === 'matched' ? 'Mark on the attendance list as a matched pair with Jonas (leader). The teachers keep them together as partners.' : (pt && pt.st === 'couple' ? 'Mark both as one couple (leader + follower) on the attendance list.' : 'Mark on the attendance list. No fixed partner: the teachers will pair them in class.') }); });
     const ownedClassCredits = (s.owned || []).filter((o) => /^Class ticket/.test(o.n)).reduce((a, o) => a + o.qty, 0);
     const passes = passList.map((pp) => ({ ...pp, open: () => this.setState({ qrPass: pp.id, qrView: 'mine' }) }));
     const qpRaw = passList.find((pp) => pp.id === s.qrPass) || passList[0] || { kind: '', title: '', rows: [], rule: '', verdict: '', allow: '', where: '', check: '', color: '#F843AA', id: 'x' };
     const qp = { ...qpRaw, cells: qrFor(qpRaw.id + holder), code: codeFor(qpRaw.id + holder), qrLabel: 'QR code for ' + qpRaw.title,
       rows: qpRaw.rows.map((r) => ({ k: r[0], v: r[1] })).concat([{ k: 'Holder', v: holder }]),
+      hasPartner: !!qpRaw.partner, ptName: qpRaw.partner ? qpRaw.partner.name : '', ptSub: qpRaw.partner ? qpRaw.partner.sub : '', ptBadge: qpRaw.partner ? qpRaw.partner.badge : '', ptInitial: qpRaw.partner ? qpRaw.partner.name.charAt(0) : '',
+      ptBadgeStyle: 'font-size: 10px; font-weight: 800; letter-spacing: 1px; padding: 3px 8px; border-radius: 8px; flex-shrink: 0; ' + (qpRaw.partner && qpRaw.partner.st === 'waiting' ? 'background: #FFD27A; color: #1A0024;' : 'background: #7FE0D0; color: #1A0024;'),
       scanVerdict: qpRaw.verdict, scanAllow: qpRaw.allow, staffCheck: qpRaw.check, isTable: !!qpRaw.isTable,
-      scanRows: [{ k: 'Holder', v: holder }, { k: 'Ticket', v: qpRaw.title }, { k: qpRaw.isTable ? 'Includes' : 'Admits', v: qpRaw.isTable ? 'Table only · no milonga entry' : (qpRaw.rows.find((r) => r[0] === 'Admits') || ['', admitsTxt])[1] }, { k: 'Checkpoint', v: qpRaw.where }].concat(qpRaw.isTable ? [{ k: 'Invited friends', v: (s.tableGuests || []).length ? (s.tableGuests || []).map((g) => g.n).join(', ') : 'none joined yet' }] : []).concat([{ k: 'Code', v: codeFor(qpRaw.id + holder) }, { k: 'Status', v: 'First scan · not used before' }]) };
+      scanRows: [{ k: 'Holder', v: holder }, { k: 'Ticket', v: qpRaw.title }, { k: qpRaw.isTable ? 'Includes' : 'Admits', v: qpRaw.isTable ? 'Table only · no milonga entry' : (qpRaw.rows.find((r) => r[0] === 'Admits') || ['', admitsTxt])[1] }, { k: 'Checkpoint', v: qpRaw.where }].concat(qpRaw.partner ? [{ k: 'Partner', v: qpRaw.partner.st === 'waiting' ? 'Not matched yet' : qpRaw.partner.name + ' (' + qpRaw.partner.badge.replace(' \u2713', '').toLowerCase() + ')' }] : (qpRaw.kind === 'CLASS' ? [{ k: 'Partner', v: 'None · pair in class' }] : [])).concat(qpRaw.isTable ? [{ k: 'Invited friends', v: (qpRaw.guests || []).length ? qpRaw.guests.map((g) => g.n).join(', ') : 'none joined yet' }] : []).concat([{ k: 'Code', v: codeFor(qpRaw.id + holder) }, { k: 'Status', v: 'First scan · not used before' }]) };
     const qTab = (on) => 'font: inherit; min-height: 36px; border-radius: 18px; border: 0; cursor: pointer; font-size: 12px; font-weight: 700; ' + (on ? 'background: #F843AA; color: #1A0024;' : 'background: transparent; color: #FFFFFF;');
     const isTickets = s.screen === 'tickets';
     const showPayBar = isTickets && s.step !== 'done' && cartCount > 0;
@@ -2137,6 +2240,13 @@ class Component extends DCLogic {
       dayDots: days.map((d, i) => ({ label: d.full, go: () => dayDrag.to(i), s: 'display: block; height: 8px; border-radius: 4px; transition: width 0.2s; ' + (i === dayIdx ? 'width: 22px; background: ' + accent + ';' : 'width: 8px; background: #5A2A75;') })),
       mRef: mDrag.ref, mDown: mDrag.down, mMove: mDrag.move, mUp: mDrag.up, djRef: djDrag.ref, djDown: djDrag.down, djMove: djDrag.move, djUp: djDrag.up,
       ...postVals, agreed, hasAgreed: agreed.length > 0, isRegister: s.screen === 'register',
+      clsTicketReady: clsPaid, clsTicketUnpaid: !!s.registered && clsRank >= 0 && !clsPaid,
+      openClsTicket: () => this.setState({ qrPass: 'cls-' + cls.id, qrView: 'mine' }),
+      showClassCredits: !!s.registered, classBought: String(classBought), classBooked: String(classBooked), classLeft: String(Math.max(0, classBought - classBooked)),
+      classInCart: classInCart, hasClassInCart: classInCart > 0,
+      classCreditNote: classBooked > classBought ? (classBooked - classBought) + ' booked class(es) are waiting for payment in your cart.' : (classInCart > 0 ? classInCart + ' class ticket(s) in your cart, not paid yet.' : (classBought - classBooked > 0 ? 'You can book ' + (classBought - classBooked) + ' more class(es) with tickets you already have.' : 'All your class tickets are used. Buy more to book another class.')),
+      buyMoreClass: gate('classes', () => this.setState({ cart: { ...this.state.cart, class: ((this.state.cart || {})['class'] || 0) + 1 } })),
+      goCheckoutClass: set({ screen: 'tickets', step: 'cart', openClass: null }),
       regNotCouple: reg.accountType !== 'couple',
       switchOpen: !!s.acctSwitch, switchStep1: !!s.acctSwitch && s.acctSwitch.step === 1, switchStep2: !!s.acctSwitch && s.acctSwitch.step === 2,
       switchStepLabel: s.acctSwitch ? 'STEP ' + s.acctSwitch.step + ' OF 2 \u00b7 ACCOUNT CHANGE' : '',
@@ -2199,7 +2309,7 @@ class Component extends DCLogic {
       hasOwned: (s.owned || []).length > 0, ownedSummary: (() => { const n = (s.owned || []).reduce((a, o) => a + o.qty, 0); return 'You have ' + n + (n === 1 ? ' ticket' : ' tickets'); })(),
       homeStats, countryCount, dancerCount, homeDays, homeSched, hasSched: homeSched.length > 0, noSched: homeSched.length === 0, schedDays, schedTitle,
       bookClass: gate('classes', bookClass), followClass, bookStyle, followStyle, clsBooked: clsStatus === 'booked', clsFollowing: clsStatus === 'following',
-      bookLabel: clsStatus === 'booked' ? 'BOOKED ✓' : 'BOOK CLASS · €25', followLabel: clsStatus === 'following' ? 'Following' : 'Follow',
+      bookLabel: clsStatus === 'booked' ? 'BOOKED ✓' : (classFree > 0 ? 'BOOK CLASS · uses 1 of your tickets' : 'BOOK CLASS · €25'), followLabel: clsStatus === 'following' ? 'Following' : 'Follow',
       isVenues: s.screen === 'venues', goVenues: set({ screen: 'venues' }),
       goMe: () => this.setState({ screen: 'me', prevMe: (s.screen === 'me' || s.screen === 'chat') ? (s.prevMe || 'home') : s.screen }),
       meLabel: 'My profile' + (unreadCount ? ', ' + unreadCount + ' unread messages' : ''),
@@ -2227,11 +2337,11 @@ class Component extends DCLogic {
       passes, passHolder: holder, walletTitle: s.justPaid ? "You're in! Your tickets" : 'My tickets',
       hasClassCredits: !s.registered || ownedClassCredits > bookedCls.length, classCreditText: !s.registered ? 'Class tickets are personal and linked to your dancer profile. Sign in to see the QR code for each class you booked.' : (ownedClassCredits - bookedCls.length) + ' class ticket(s) not linked to a class yet. Book a class in the Classes tab and its QR code appears here.',
       qrOpen: !!s.qrPass, qp,
-      tableShared: !!s.tableShared, shareTable: set({ tableShared: true }),
+      tableShared: !!(s.tableShared || {})[qp.id], shareTable: () => this.setState({ tableShared: { ...(this.state.tableShared || {}), [qp.id]: true } }),
       tableLink: 'lusitango.app/t/' + codeFor('tbl' + holder).replace('LTF27-', '').toLowerCase(),
-      tableSeatsLeft: (3 - (s.tableGuests || []).length) + ' of 3 seats left', canAddGuest: (s.tableGuests || []).length < 3,
-      addGuest: () => { const pool = [{ n: 'Marta Lopes', t: 'Accepted the invitation · has her own milonga pass \u2713', ok: true }, { n: 'Jo\u00e3o Reis', t: 'Accepted the invitation · has his own milonga ticket \u2713', ok: true }, { n: 'In\u00eas Duarte', t: 'Accepted · still needs a milonga ticket to get in', ok: false }]; const g = this.state.tableGuests || []; if (g.length < 3) this.setState({ tableGuests: g.concat([pool[g.length]]) }); },
-      tableSeats: [{ n: holder + ' (you)', t: 'Table holder', ok: true }].concat(s.tableGuests || []).concat([0, 1, 2].slice((s.tableGuests || []).length).map(() => ({ n: 'Free seat', t: s.tableShared ? 'Invitation sent · waiting for a friend' : 'Free seat · invite a friend', ok: null })))
+      tableSeatsLeft: (3 - (qp.guests || []).length) + ' of 3 seats left', canAddGuest: (qp.guests || []).length < 3,
+      addGuest: () => { const pool = [{ n: 'Marta Lopes', t: 'Accepted the invitation · has her own milonga pass \u2713', ok: true }, { n: 'Jo\u00e3o Reis', t: 'Accepted the invitation · has his own milonga ticket \u2713', ok: true }, { n: 'In\u00eas Duarte', t: 'Accepted · still needs a milonga ticket to get in', ok: false }]; const all = this.state.tableGuests || {}; const g = all[qp.id] || []; if (g.length < 3) this.setState({ tableGuests: { ...all, [qp.id]: g.concat([pool[g.length]]) } }); },
+      tableSeats: [{ n: holder + ' (you)', t: 'Table holder', ok: true }].concat(qp.guests || []).concat([0, 1, 2].slice((qp.guests || []).length).map(() => ({ n: 'Free seat', t: (s.tableShared || {})[qp.id] ? 'Invitation sent · waiting for a friend' : 'Free seat · invite a friend', ok: null })))
         .map((g) => ({ ...g, dot: 'width: 10px; height: 10px; border-radius: 5px; flex-shrink: 0; background: ' + (g.ok === true ? '#7FE0D0' : (g.ok === false ? '#FFD27A' : '#5A2A75')) + ';' })), closeQr: set({ qrPass: null }), qrMine: s.qrView !== 'scan', qrScan: s.qrView === 'scan',
       showMine: set({ qrView: 'mine' }), showScan: set({ qrView: 'scan' }), qrTabMine: qTab(s.qrView !== 'scan'), qrTabScan: qTab(s.qrView === 'scan'),
       showPayBar, payAction, payLabel: s.step === 'cart' ? 'CHECKOUT' : 'PAY ' + eur(total),
