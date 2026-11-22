@@ -411,6 +411,29 @@ ${(isRegister) ? html`
       <span style="font-size: 12px; color: #A88BBB; line-height: 1.45">Your level is shown to other dancers only when you are looking for a class partner, so you can find a good match.</span>
     </fieldset>
 
+    ${(regNotRegistered) ? html`
+      <section aria-label="Your privacy" style="display: flex; flex-direction: column; gap: 8px; background: #23002F; border: 1px solid #5A2A75; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+        <span style="display: flex; gap: 8px; align-items: center; font-size: 14px; font-weight: 700; color: #FFFFFF"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7FE0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3l8 3v6c0 4.5-3.4 8.3-8 9-4.6-.7-8-4.5-8-9V6z"></path></svg>Your privacy</span>
+        <ul style="margin: 0; padding-left: 18px">
+          <li style="margin: 3px 0">We use your data <strong style="color: #FFFFFF">only to run the festival app</strong>: your profile, finding class partners, messages and your tickets.</li>
+          <li style="margin: 3px 0">We <strong style="color: #FFFFFF">never sell</strong> your personal data, and never use it for advertising.</li>
+          <li style="margin: 3px 0">Other dancers only see your name, city, level and role when you look for a class partner. Email and phone are seen only by the organizers.</li>
+          <li style="margin: 3px 0">You can download your data or delete your account at any time from your profile.</li>
+        </ul>
+        <details style="font-size: 12px; color: #D4C2E0">
+          <summary style="cursor: pointer; color: #F843AA; font-weight: 600; font-size: 13px">Read the full privacy policy</summary>
+          <p style="margin: 8px 0 0"><strong style="color: #FFFFFF">Who is responsible:</strong> the Lisbon Tango Festival (Lusitango) organization. Contact: reg.lusitango@gmail.com.</p>
+          <p style="margin: 6px 0 0"><strong style="color: #FFFFFF">Why:</strong> to provide the app and festival services you ask for (contract), keep the community safe (legitimate interest), anonymous statistics from optional age and gender (consent), and invoices as Portuguese tax law requires.</p>
+          <p style="margin: 6px 0 0"><strong style="color: #FFFFFF">Who can see it:</strong> other dancers see only what is needed for partner finding and messages; organizers see your profile and your messages to the team, never private chats unless one of you reports them; service providers (sign-in emails, payments) only as needed, under data-processing agreements. Stored on the festival's own server in the EU.</p>
+          <p style="margin: 6px 0 0"><strong style="color: #FFFFFF">How long:</strong> until you delete your account, or at the latest 2 years after the last festival you registered for. Invoices: as long as tax law requires.</p>
+          <p style="margin: 6px 0 0"><strong style="color: #FFFFFF">Your rights:</strong> access, correct, download, delete, object, restrict, withdraw consent. Complaints: CNPD, www.cnpd.pt.</p>
+        </details>
+      </section>
+      <button type="button" onClick=${(togglePrivacy)} role="checkbox" aria-checked=${(regPrivacyOk)} style="font: inherit; display: flex; gap: 12px; align-items: flex-start; padding: 4px 0; border: 0; background: transparent; color: #FFFFFF; text-align: left; font-size: 14px; line-height: 1.45; cursor: pointer">
+        <span style=${(privacyBox)}>${(privacyMark)}</span>
+        <span>I have read and accept the privacy policy.</span>
+      </button>
+    ` : null}
     ${(regMissing) ? html`
       <span style="font-size: 12px; color: #FFB36B; text-align: center">${(regHint)}</span>
     ` : null}
@@ -813,15 +836,6 @@ ${(isProfile) ? html`
           </li>
         `)}
       </ul>
-    </section>
-
-    <section style="display: flex; flex-direction: column; gap: 10px">
-      <h3 style="margin: 0; font-size: 13px; font-weight: 700; letter-spacing: 2px; color: #D4C2E0">GALLERY</h3>
-      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px">
-        <div style="height: 96px; border-radius: 12px; background: #3D005C; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #D4C2E0">Photo</div>
-        <div style="height: 96px; border-radius: 12px; background: #3D005C; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #D4C2E0">Photo</div>
-        <div style="height: 96px; border-radius: 12px; background: #3D005C; display: flex; align-items: center; justify-content: center; font-size: 10px; color: #D4C2E0">Video</div>
-      </div>
     </section>
 
     ${(prof.hasLinks) ? html`
@@ -1854,6 +1868,7 @@ class Component extends DCLogic {
     if (reg.accountType !== 'couple' && !reg.leader && !reg.follower) missing.push('leader or follower');
     if (!reg.level) missing.push('dancing level');
     if (reg.accountType === 'couple' && !(reg.partnerName || '').trim()) missing.push("your partner's name");
+    if (!s.registered && !reg.privacyOk) missing.push('accepting the privacy policy');
     const regValid = missing.length === 0;
     const isCouple = !!s.registered && reg.accountType === 'couple';
     const regRoleText = reg.accountType === 'couple' || (reg.leader && reg.follower) ? 'Leader & follower' : (reg.leader ? 'Leader' : (reg.follower ? 'Follower' : ''));
@@ -2415,6 +2430,9 @@ class Component extends DCLogic {
       coupleNote: 'You are registered as a couple' + ((reg.partnerName || '').trim() ? ' with ' + reg.partnerName.trim() : '') + ', so partner requests are off. You can still see who is looking for a partner.',
       accountLabel: !s.registered ? 'Not registered' : (isCouple ? 'Couple' : 'Single dancer'),
       askPassword: !s.registered,
+      regPrivacyOk: !!reg.privacyOk, privacyMark: reg.privacyOk ? '✓' : '',
+      privacyBox: 'width: 24px; height: 24px; flex-shrink: 0; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 15px; font-weight: 800; box-sizing: border-box; ' + (reg.privacyOk ? 'background: #F843AA; color: #1A0024;' : 'border: 2px solid #A88BBB;'),
+      togglePrivacy: () => setReg('privacyOk', !(this.state.reg || this._reg0).privacyOk),
       regIsCouple: reg.accountType === 'couple', regRolesLegend: reg.accountType === 'couple' ? 'WE DANCE AS · LEADER + FOLLOWER' : 'I DANCE AS · CHOOSE ONE OR BOTH', regNameLabel: reg.accountType === 'couple' ? 'YOUR NAME' : 'NAME',
       accTypes: [{ id: 'single', n: 'Single dancer' }, { id: 'couple', n: 'Couple' }].map((a) => ({ ...a, on: reg.accountType === a.id, pick: () => { if (reg.accountType === a.id) return; if (s.registered) this.setState({ acctSwitch: { to: a.id, step: 1 } }); else setReg('accountType', a.id); },
         style: 'font: inherit; min-height: 44px; border-radius: 20px; border: 0; cursor: pointer; font-size: 14px; font-weight: 700; ' + (reg.accountType === a.id ? 'background: ' + accent + '; color: #1A0024;' : 'background: transparent; color: #FFFFFF;') })),
