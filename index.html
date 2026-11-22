@@ -308,9 +308,21 @@ ${(isRegister) ? html`
           <button type="button" onClick=${(at.pick)} aria-pressed=${(at.on)} style=${(at.style)}>${(at.n)}</button>
         `)}
       </div>
-      <span style="font-size: 12px; color: #A88BBB; line-height: 1.45">You can switch between single and couple later from your profile. Prices and features follow your choice.</span>
+      
       ${(regIsCouple) ? html`
-        <span style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #FFD27A; line-height: 1.45; background: #23002F; border-radius: 12px; padding: 10px 12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M12 8v5M12 16h.01M12 3l10 18H2z"></path></svg>As a couple you buy tickets at the couple price for two. You dance together, so the class partner finder is view-only: you can see who is looking, but you can't send or accept partner requests. Shared housing works as usual.</span>
+        <span style="display: flex; gap: 8px; align-items: flex-start; font-size: 12px; color: #FFD27A; line-height: 1.45; background: #23002F; border-radius: 12px; padding: 10px 12px"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><path d="M12 8v5M12 16h.01M12 3l10 18H2z"></path></svg><span>As a couple there are some limitations in the app:<br />  1. Ticket prices are for two people.<br />  2.  One partner is mainly a leader.<br />  3. The other partner is mainly a follower.<br />  4. Finding partner feature is blocked.<br /></span></span>
+      ` : null}
+    </fieldset>
+
+    <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
+      <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">${(regRolesLegend)}</legend>
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        ${((regRoles) || []).map((rr, $index) => html`
+          <button type="button" onClick=${(rr.toggle)} aria-pressed=${(rr.on)} aria-disabled=${(regIsCouple)} style=${(rr.style)}><span style=${(rr.box)}>${(rr.mark)}</span>${(rr.n)}</button>
+        `)}
+      </div>
+      ${(regIsCouple) ? html`
+        <span style="display: flex; gap: 8px; align-items: flex-start; font-size: 13px; line-height: 1.45; color: #D4C2E0"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#7FE0D0" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0; margin-top: 1px"><circle cx="12" cy="12" r="9"></circle><path d="M12 11v5M12 8h.01"></path></svg><span>As a couple we assume one of you is the leader and the other the follower.</span></span>
       ` : null}
     </fieldset>
 
@@ -389,22 +401,7 @@ ${(isRegister) ? html`
       <span style="font-size: 12px; color: #D4C2E0; line-height: 1.45">Age and gender are used only for anonymous festival statistics. They are never shown on your profile or to other dancers.</span>
     </div>
 
-    ${(regNotCouple) ? html`
-    <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px">
-      <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">I DANCE AS · CHOOSE ONE OR BOTH</legend>
-      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
-        ${((regRoles) || []).map((rr, $index) => html`
-          <button type="button" onClick=${(rr.toggle)} aria-pressed=${(rr.on)} style=${(rr.style)}><span style=${(rr.box)}>${(rr.mark)}</span>${(rr.n)}</button>
-        `)}
-      </div>
-    </fieldset>
-    ` : null}
-    ${(regIsCouple) ? html`
-      <div style="display: flex; gap: 10px; align-items: center; background: #23002F; border-radius: 14px; padding: 12px 14px; font-size: 13px; line-height: 1.45">
-        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#F843AA" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="flex-shrink: 0"><path d="M9 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6zM3 20c0-3 3-5 6-5s6 2 6 5M17 11a3 3 0 1 0 0-6M21 20c0-2.5-1.5-4-4-4.5"></path></svg>
-        <span><strong>Roles: one leader + one follower.</strong> A couple account always attends together as a leader and a follower.</span>
-      </div>
-    ` : null}
+    
 
     <fieldset style="border: 0; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 8px">
       <legend style="padding: 0; margin-bottom: 10px; font-size: 12px; font-weight: 700; letter-spacing: 1.5px; color: #D4C2E0">DANCING LEVEL</legend>
@@ -1118,10 +1115,42 @@ ${(isTicketsCart) ? html`
       </section>
     `)}
     </div>
+    <h2 style="margin: 8px 0 0; font-size: 13px; font-weight: 800; letter-spacing: 2px; color: #D4C2E0">FESTIVAL POLICY</h2>
     <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
-      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Prices & refund policy</summary>
-      <p style="margin: 8px 0 0">All fees included. Purchases at the venue carry an extra €5 fee.</p>
-      <p style="margin: 8px 0 0">Refunds minus fees (up to 15%): 100% until 30 days before the festival, 50% until 15 days, 25% until 7 days, none after that unless the organization accepts a justified exception.</p>
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Prices, payment & your tickets</summary>
+      <ul style="margin: 8px 0 0; padding-left: 18px"><li style="margin: 4px 0">Prices are for online registration with advance payment.</li><li style="margin: 4px 0">All taxes and fees are included, except any charged by your card or bank.</li><li style="margin: 4px 0">Buying at the venue costs an extra €5 per transaction.</li><li style="margin: 4px 0">After payment, your tickets appear in this app and are emailed to you. Not there within 15 minutes? Check your spam folder.</li></ul>
+    </details>
+    <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Buying at the door</summary>
+      <p style="margin: 8px 0 0">There is a selling point and registration desk at the main venue, on the 3rd floor near the Gala Salon (Rua Voz do Operário 13, 1100 Lisboa). Opening hours are announced in the app.</p><p style="margin: 8px 0 0">Not every ticket sells out online, but availability at the door is not guaranteed, especially for the Friday and Saturday evening milongas and some classes.</p><p style="margin: 8px 0 0">On the show night, between 20:00 and 21:00, the desk only sells show tickets.</p>
+    </details>
+    <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Refund policy</summary>
+      <p style="margin: 8px 0 0">Fees (up to 15%) are deducted from every refund.</p><ul style="margin: 8px 0 0; padding-left: 18px"><li style="margin: 4px 0">Up to 30 days before the festival starts: 100%</li><li style="margin: 4px 0">Up to 15 days before: 50%</li><li style="margin: 4px 0">Up to 7 days before: 25%</li><li style="margin: 4px 0">Less than 7 days before: no refund, unless the organization accepts a justified exception</li></ul><p style="margin: 8px 0 0">The festival is not liable for cancellations or changes to the program, artists or venues caused by events outside its control (force majeure, war, strikes, etc.).</p>
+    </details>
+    <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Tango & Fado stage show</summary>
+      <ul style="margin: 8px 0 0; padding-left: 18px"><li style="margin: 4px 0">The show starts at 21:00 sharp. We advise arriving at 20:30.</li><li style="margin: 4px 0"><strong style="color: #FFFFFF">Balcony:</strong> no assigned seats, first come, first served.</li><li style="margin: 4px 0"><strong style="color: #FFFFFF">VIP:</strong> one seat at a table for four on the dance-floor level, with a bottle of champagne shared at the table.</li></ul>
+    </details>
+    <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Evening milongas & tables</summary>
+      <p style="margin: 8px 0 0">A milonga ticket does not include a table. You can use the free seats, first come, first served. Please share free seats!</p><p style="margin: 8px 0 0">A table reservation, on top of the milonga ticket, gives you a table with 4 chairs just for you and your friends. You choose the table when you book; please double-check it, as changing it later can be difficult.</p>
+    </details>
+    <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Afternoon milongas</summary>
+      <p style="margin: 8px 0 0">No table reservations at the afternoon milongas. Enjoy a relaxed afternoon of tango.</p>
+    </details>
+    <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Classes</summary>
+      <ul style="margin: 8px 0 0; padding-left: 18px"><li style="margin: 4px 0">Each workshop is 1h15.</li><li style="margin: 4px 0">Coming alone? The festival does not provide taxi dancers or guarantee a partner. Mark "I'm interested" on a class in this app to find one, or use the Facebook group "Sharing for Lisbon Tango Festival".</li><li style="margin: 4px 0">Please respect the announced level of each workshop.</li></ul>
+    </details>
+    <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Photos & video at the festival</summary>
+      <p style="margin: 8px 0 0">Photos, audio and video are recorded at all venues for the archive, live and after-event publishing, and festival promotion. By entering, you agree to this. If you would rather not appear in an image focused on you, tell us and we will try to blur or remove it.</p>
+    </details>
+    <details style="background: #23002F; border-radius: 16px; padding: 14px 16px; font-size: 13px; line-height: 1.5; color: #D4C2E0">
+      <summary style="cursor: pointer; color: #FFFFFF; font-weight: 600; min-height: 24px">Help with tickets</summary>
+      <p style="margin: 8px 0 0">Write to the festival team in the app (Messages), or email <a href="mailto:reg.lusitango@gmail.com" style="color: #F843AA; font-weight: 600">reg.lusitango@gmail.com</a>.</p>
     </details>
   </div>
 ` : null}
@@ -1810,9 +1839,10 @@ class Component extends DCLogic {
     const avBg = avColors[reg.avatar] || avColors[0];
     const avatars = avColors.map((c, i) => ({ on: i === reg.avatar && !reg.photo, label: 'Avatar colour ' + (i + 1), pick: () => this.setState({ reg: { ...(this.state.reg || this._reg0), avatar: i, photo: null } }),
       style: 'font: inherit; width: 44px; height: 44px; border-radius: 22px; cursor: pointer; padding: 0; font-size: 16px; font-weight: 800; color: #1A0024; background: ' + c + '; border: 3px solid ' + (i === reg.avatar && !reg.photo ? '#FFFFFF' : 'transparent') + '; box-shadow: ' + (i === reg.avatar && !reg.photo ? '0 0 0 2px #F843AA' : 'none') + ';' }));
-    const regRoles = [{ id: 'leader', n: 'Leader' }, { id: 'follower', n: 'Follower' }].map((r) => ({ ...r, on: !!reg[r.id], mark: reg[r.id] ? '✓' : '', toggle: () => setReg(r.id, !(this.state.reg || this._reg0)[r.id]),
-      box: 'width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; box-sizing: border-box; ' + (reg[r.id] ? 'background: #1A0024; color: #F843AA;' : 'border: 2px solid #A88BBB;'),
-      style: 'font: inherit; min-height: 52px; padding: 0 14px; border-radius: 14px; cursor: pointer; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; ' + (reg[r.id] ? 'background: ' + accent + '; color: #1A0024; border: 0;' : 'background: #23002F; color: #FFFFFF; border: 1px solid #5A2A75;') }));
+    const regCoupleNow = reg.accountType === 'couple';
+    const regRoles = [{ id: 'leader', n: 'Leader' }, { id: 'follower', n: 'Follower' }].map((r) => ({ ...r, on: regCoupleNow || !!reg[r.id], mark: (regCoupleNow || reg[r.id]) ? '✓' : '', toggle: () => { if ((this.state.reg || this._reg0).accountType === 'couple') return; setReg(r.id, !(this.state.reg || this._reg0)[r.id]); },
+      box: 'width: 22px; height: 22px; border-radius: 6px; display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 800; box-sizing: border-box; ' + (regCoupleNow ? 'background: #2A1A33; color: #7A5A8A;' : reg[r.id] ? 'background: #1A0024; color: #F843AA;' : 'border: 2px solid #A88BBB;'),
+      style: 'font: inherit; min-height: 52px; padding: 0 14px; border-radius: 14px; display: flex; align-items: center; gap: 10px; font-size: 15px; font-weight: 700; ' + (regCoupleNow ? 'cursor: not-allowed; background: #3A1A4A; color: #7A5A8A; border: 0;' : 'cursor: pointer; ' + (reg[r.id] ? 'background: ' + accent + '; color: #1A0024; border: 0;' : 'background: #23002F; color: #FFFFFF; border: 1px solid #5A2A75;')) }));
     const levelDefs = [{ id: 'first', n: 'First steps' }, { id: 'weekend', n: 'Weekend social dancer' }, { id: 'active', n: 'Very active social dancer' }, { id: 'pro', n: 'Professional social dancer' }];
     const regLevels = levelDefs.map((l) => ({ ...l, on: reg.level === l.id, pick: () => setReg('level', l.id),
       dot: 'width: 18px; height: 18px; flex-shrink: 0; border-radius: 9px; box-sizing: border-box; ' + (reg.level === l.id ? 'border: 5px solid #1A0024; background: #FFFFFF;' : 'border: 2px solid #A88BBB;'),
@@ -2385,7 +2415,7 @@ class Component extends DCLogic {
       coupleNote: 'You are registered as a couple' + ((reg.partnerName || '').trim() ? ' with ' + reg.partnerName.trim() : '') + ', so partner requests are off. You can still see who is looking for a partner.',
       accountLabel: !s.registered ? 'Not registered' : (isCouple ? 'Couple' : 'Single dancer'),
       askPassword: !s.registered,
-      regIsCouple: reg.accountType === 'couple', regNameLabel: reg.accountType === 'couple' ? 'YOUR NAME' : 'NAME',
+      regIsCouple: reg.accountType === 'couple', regRolesLegend: reg.accountType === 'couple' ? 'WE DANCE AS · LEADER + FOLLOWER' : 'I DANCE AS · CHOOSE ONE OR BOTH', regNameLabel: reg.accountType === 'couple' ? 'YOUR NAME' : 'NAME',
       accTypes: [{ id: 'single', n: 'Single dancer' }, { id: 'couple', n: 'Couple' }].map((a) => ({ ...a, on: reg.accountType === a.id, pick: () => { if (reg.accountType === a.id) return; if (s.registered) this.setState({ acctSwitch: { to: a.id, step: 1 } }); else setReg('accountType', a.id); },
         style: 'font: inherit; min-height: 44px; border-radius: 20px; border: 0; cursor: pointer; font-size: 14px; font-weight: 700; ' + (reg.accountType === a.id ? 'background: ' + accent + '; color: #1A0024;' : 'background: transparent; color: #FFFFFF;') })),
       onPartnerName: (e) => setReg('partnerName', e.target.value), onPassword: (e) => setReg('password', e.target.value),
