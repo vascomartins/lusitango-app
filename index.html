@@ -938,6 +938,7 @@ ${(isClassList) ? html`
         <span style="display: flex; gap: 8px; flex-wrap: wrap; margin-top: 4px">
           <span style="font-size: 11px; font-weight: 600; padding: 4px 10px; border-radius: 12px; background: #3D005C">${(c.balance)}</span>
           <span style="font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; background: #F843AA; color: #1A0024">${(c.lookingLabel)}</span>
+          <span style="font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 12px; border: 1px solid #5A2A75; color: #D4C2E0">${(c.placesLabel)}</span>
           ${(c.hasStatus) ? html`<span style=${(c.statusStyle)}>${(c.statusLabel)}</span>` : null}
         </span>
       </button>
@@ -1727,7 +1728,7 @@ class Component extends DCLogic {
     const classDays = cDays.map((d) => ({ ...d, on: s.cDay === d.id, style: chip(s.cDay === d.id), pick: set({ cDay: d.id }) }));
     const classes = allClasses.filter((c) => c.day === s.cDay).map((c) => {
       const diff = c.leaders - c.followers;
-      return { ...c, balance: diff === 0 ? 'Balanced roles' : (diff > 0 ? 'Needs ' + diff + ' followers' : 'Needs ' + (-diff) + ' leaders'), lookingLabel: c.looking + ' looking for a partner', open: set({ openClass: c.id }),
+      return { ...c, balance: diff === 0 ? 'Balanced roles' : (diff > 0 ? 'Needs ' + diff + ' followers' : 'Needs ' + (-diff) + ' leaders'), lookingLabel: c.looking + ' looking for a partner', placesLabel: (16 - c.leaders) + ' + ' + (16 - c.followers) + ' places left', open: set({ openClass: c.id }),
         hasStatus: !!s.myClasses[c.id], statusLabel: s.myClasses[c.id] ? statusName[s.myClasses[c.id]] : '', statusStyle: s.myClasses[c.id] ? badgeFor(s.myClasses[c.id]).replace('align-self: flex-start; ', '') : '',
         cardStyle: 'font: inherit; text-align: left; background: #23002F; border-radius: 18px; padding: 14px 16px; color: #FFFFFF; cursor: pointer; display: flex; flex-direction: column; gap: 6px; border: ' + (s.myClasses[c.id] ? '2px solid ' + statusColor[s.myClasses[c.id]] : '1px solid #3A0F50') + ';' };
     });
